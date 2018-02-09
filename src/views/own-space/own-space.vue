@@ -10,10 +10,10 @@
                 个人信息
             </p>
             <div>
-                <Form 
+                <Form
                     ref="userForm"
-                    :model="userForm" 
-                    :label-width="100" 
+                    :model="userForm"
+                    :label-width="100"
                     label-position="right"
                     :rules="inforValidate"
                 >
@@ -39,11 +39,8 @@
                             </div>
                         </div>
                     </FormItem>
-                    <FormItem label="公司：">
+                    <FormItem label="店铺：">
                         <span>{{ userForm.company }}</span>
-                    </FormItem>
-                    <FormItem label="部门：">
-                        <span>{{ userForm.department }}</span>
                     </FormItem>
                     <FormItem label="登录密码：">
                         <Button type="text" size="small" @click="showEditPassword">修改密码</Button>
@@ -219,7 +216,7 @@ export default {
             this.userForm.name = 'Lison';
             this.userForm.cellphone = '17712345678';
             this.initPhone = '17712345678';
-            this.userForm.company = 'TalkingData';
+            this.userForm.company = '总店';
             this.userForm.department = '可视化部门';
         },
         cancelInputCodeBox () {
