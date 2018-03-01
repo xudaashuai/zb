@@ -8,7 +8,9 @@ import '@/locale';
 import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from './libs/util';
-
+import axios from 'axios'
+axios.default.baseURL='http://baidu.com/api'
+Vue.prototype.$http = axios
 Vue.use(VueI18n);
 Vue.use(iView);
 
