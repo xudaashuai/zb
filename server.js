@@ -3,7 +3,7 @@ var app = express();
 var http=require('http')
 var server = http.Server(app);
 var path = require('path');
-server.listen(8081);
+server.listen(8080);
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://120.25.75.23:27017/data';
@@ -105,7 +105,7 @@ app.route('/:model')
 
     });
 var app2=express()
-http.Server(app2).listen(8080)
+http.Server(app2).listen(80)
 app2.get('/*', function (req, res) {
     if (req.originalUrl === '/') {
         res.sendFile(__dirname + '/dist/index.html');
