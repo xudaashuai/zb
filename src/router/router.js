@@ -160,7 +160,49 @@ export const appRouter = [
                 path: 'kcpd',
                 title: '库存盘点',
                 name: 'Inventory Manage3',
-                component: () => import('@/views/inventory-browsing/xq/main.vue')
+                component: () => import('@/views/kcgl/kcpd/main.vue')
+            },
+        ]
+    },
+    {
+        path: '/rzjl',
+        icon: 'cube',
+        title: '日志记录',
+        name: 'rzjl',
+        component: Main,
+        children: [
+            {
+                path: 'kcrz',
+                title: '库存日志',
+                name: 'kcrz',
+                component: () => import('@/views/rzjl/kcrz.vue')
+            },
+            {
+                path: 'pdrz',
+                title: '盘点日志',
+                name: 'pdrz',
+                component: () => import('@/views/rzjl/pdrz.vue')
+            },
+        ]
+    },
+    {
+        path: '/sjtj',
+        icon: 'cube',
+        title: '数据统计',
+        name: 'sjtj',
+        component: Main,
+        children: [
+            {
+                path: 'sj',
+                title: '数据统计',
+                name: 'sj',
+                component: () => import('@/views/sjtj/sjtj.vue')
+            },
+            {
+                path: 'sjt',
+                title: '数据统计',
+                name: 'sjt',
+                component: () => import('@/views/sjtj/sjtj.vue')
             },
         ]
     },

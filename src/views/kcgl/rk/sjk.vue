@@ -12,18 +12,15 @@
         <FormItem label="进货日期" prop="进货日期" :rules="{type: 'date',required: true, message: '不能为空哦', trigger: 'blur'}">
             <DatePicker type="date" v-model="form.进货日期"></DatePicker>
         </FormItem>
-        <FormItem label="主石" prop="主石" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="text" v-model="form.主石"></Input>
-        </FormItem>
         <FormItem
-                v-for="(item, index) in form.配石"
+                v-for="(item, index) in form.组成"
                 :key="index"
-                :label="'配石 ' + (index+1)"
-                :prop="'配石.' + index + '.value'"
-                :rules="{required: true, message: '配石 ' + (index+1) +'不能为空', trigger: 'blur'}">
+                :label="'组成 ' + (index+1)"
+                :prop="'组成.' + index "
+                :rules="{required: true, message: '组成 ' + (index+1) +'不能为空', trigger: 'blur'}">
             <Row>
                 <Col span="20">
-                <Input type="text" v-model="item.value" placeholder="输入配石信息"></Input>
+                <Input type="text" v-model="form.组成[index]" placeholder="输入组成信息"></Input>
                 </Col>
                 <Col span="3" offset="1">
                 <Button type="ghost" @click="handleRemove(index)">删除</Button>
@@ -33,7 +30,7 @@
         <FormItem>
             <Row>
                 <Col span="12">
-                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加 配石</Button>
+                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加 组成</Button>
                 </Col>
             </Row>
         </FormItem>
@@ -49,12 +46,8 @@
             return {
                 index: 1,
                 form: {
-                    配石: [
-                        {
-                            value: '',
-                            index: 1,
-                            status: 1
-                        }
+                    path:'sjk',
+                    组成: [''
                     ],
                     货号: '',
                     证书号: '',
@@ -62,7 +55,7 @@
                     名称: '',
                     进货日期: new Date(),
                     标价: '',
-                    主石:''
+                    主石: ''
                 }
             };
         },
@@ -70,9 +63,16 @@
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$Message.success('Success!');
+                        this.$Message.info('正在添加');
+                        this.form._id = this.form.货号;
+                        this.$store.dispatch('add', this.form).then((res) => {
+                            console.log(res);
+                            this.$Message.success('添加成功!');
+                        }, (err) => {
+                            this.$Message.error(err);
+                        });
                     } else {
-                        this.$Message.error('Fail!');
+                        this.$Message.error('表单信息不完整');
                     }
                 });
             },
@@ -81,14 +81,10 @@
             },
             handleAdd () {
                 this.index++;
-                this.form.配石.push({
-                    value: '',
-                    index: this.index,
-                    status: 1
-                });
+                this.form.组成.push('');
             },
             handleRemove (index) {
-                this.form.配石.splice(index,1);
+                this.form.组成.splice(index, 1);
             }
         }
     };

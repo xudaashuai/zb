@@ -2,12 +2,29 @@
     <Card class="card">
         <Tabs value="全部">
             <TabPane label="全部" name="全部">
-                <Table highlight-row stripe :height="height" class="table" border :columns="zbColumns"
-                       :data="allData"></Table>
+                <v-table
+                        is-vertical-resize
+                        style="width:100%"
+                        is-horizontal-resize
+                        :vertical-resize-offset='40'
+                        column-width-drag
+                        row-hover-color="#eee"
+                        row-click-color="#edf7ff"
+                        odd-bg-color="#fafafa"
+                        :columns="spColumns"
+                        :table-data="allData"></v-table>
             </TabPane>
             <TabPane v-for="type in mType" :label="type" :key="type" :name="type">
-                <Table highlight-row stripe :height="height" class="table" border :columns="zbColumns"
-                       :data="data[type]"></Table>
+                <v-table is-vertical-resize
+                         style="width:100%"
+                         is-horizontal-resize
+                         :vertical-resize-offset='40'
+                         column-width-drag
+                         row-hover-color="#eee"
+                         row-click-color="#edf7ff"
+                         :columns="spColumns"
+                         odd-bg-color="#fafafa"
+                         :table-data="data[type]"></v-table>
             </TabPane>
         </Tabs>
     </Card>
@@ -18,11 +35,10 @@
     export default {
         data: function () {
             return {
-                height: 10
             };
         },
         computed: {
-            ...mapGetters(['zbColumns']),
+            ...mapGetters(['spColumns']),
             ...mapState({
                 mType: state => state.zb.mType
             }),
@@ -34,11 +50,16 @@
                 return t;
             },
             ...mapState({
-                allData: (state) => state.zb.zbData
+                allData: (state) => state.zb.sp
             })
         },
         mounted () {
-            this.$nextTick(() => this.height = this.$el.parentElement.parentElement.clientHeight - 107);
+        },
+        created () {
+            this.$store.dispatch('get', {path: 'sp'}).then(
+                () => this.$Message.success('加载数据成功'),
+                () => this.$Message.error('加载数据失败')
+            );
         }
     };
 </script>
