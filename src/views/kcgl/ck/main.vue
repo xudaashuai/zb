@@ -1,39 +1,42 @@
 <template>
-    <Form :model="form" ref="form" :label-width="80">
-        <FormItem label="类别" prop="类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Select v-model="form.类别">
-                <Option v-for="item in ckTypes" :key="item" :value="item">{{item}}</Option>
-            </Select>
-        </FormItem>
-        <FormItem v-if="form.物品类别==='原料'||form.物品类别==='配件'" label="重量" prop="重量"
-                  :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.重量"></Input>
-        </FormItem>
-        <FormItem v-if="form.出库物品" label="出库物品" prop="出库物品"
-                  :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="text" v-model="form.出库物品"></Input>
-        </FormItem>
-        <FormItem disabled label="日期" prop="日期" :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
-            <DatePicker type="date" v-model="form.日期"></DatePicker>
-        </FormItem>
-        <FormItem label="物品类别" prop="物品类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Select v-model="form.物品类别">
-                <Option v-for="item in wpTypes" :key="item" :value="item">{{item}}</Option>
-            </Select>
-        </FormItem>
-        <FormItem v-if="form.类别==='出售'" label="售价" prop="售价"
-                  :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.售价"></Input>
-        </FormItem>
-        <FormItem label="数量" prop="数量"
-                  :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.数量"></Input>
-        </FormItem>
-        <FormItem>
-            <Button type="primary" @click="handleSubmit('form')">添加</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="handleReset('form')">清空</Button>
-        </FormItem>
-    </Form>
+    <Card>
+        <Form :model="form" ref="form" :label-width="80">
+            <FormItem label="类别" prop="类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Select v-model="form.类别">
+                    <Option v-for="item in ckType" :key="item" :value="item">{{item}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem disabled label="日期" prop="日期"
+                      :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
+                <DatePicker type="date" v-model="form.日期"></DatePicker>
+            </FormItem>
+            <FormItem label="物品类别" prop="物品类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Select v-model="form.物品类别">
+                    <Option v-for="item in wpType" :key="item" :value="item">{{item}}</Option>
+                </Select>
+            </FormItem>
+            <FormItem label="数量" prop="数量"
+                      :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="number" v-model="form.数量"></Input>
+            </FormItem>
+            <FormItem v-if="form.物品类别==='商品'" label="条形码" prop="条形码"
+                      :rules="{type:'array',required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Select v-model="form.条形码" filterable multiple>
+                    <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
+                        <span style="float:right;color:#ccc">{{item.条码号}}</span>
+                    </Option>
+                </Select>
+            </FormItem>
+            <FormItem v-if="form.类别==='出售'" label="售价" prop="售价"
+                      :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="number" v-model="form.售价"></Input>
+            </FormItem>
+            <FormItem>
+                <Button type="primary" @click="handleSubmit('form')">添加</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="handleReset('form')">清空</Button>
+            </FormItem>
+        </Form>
+    </Card>
 </template>
 <script>
     import {mapState} from 'vuex';
@@ -50,6 +53,7 @@
                     出库原因: '',
                     数量: '',
                     售价: '',
+                    条形码: [],
                     日期: new Date(),
                     人员: ''
                 },
@@ -70,6 +74,9 @@
                 mType: state => state.zb.mType,
                 uType: state => state.zb.uType,
             }),
+            ...mapState({
+                data: (state) => state.zb.sp
+            })
         },
         methods: {
             handleSubmit (name) {
@@ -77,7 +84,7 @@
                     if (valid) {
                         this.$Message.info('正在出库');
                         this.form._id = this.form.货号;
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('ck', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('出库成功!');
                         }, (err) => {

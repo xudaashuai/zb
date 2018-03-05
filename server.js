@@ -51,48 +51,54 @@ app.route('/:model')
     .post(function (req, res) {
         let model = req.params.model;
         console.log(req);
-        delete req.body.path;
-        db.collection(model).insertOne(req.body, function (err, result) {
-            if (err) {
-                res.json(err);
-            } else {
-                res.json(result);
-                if (model === 'pd') {
-                    db.collection('rz').insertOne(
-                        {
-                            类型: '盘点',
-                            模块: mk[model],
-                            时间: new Date(),
-                            用户: req.body.user,
-                        },
-                        (err, result) => {
-                            if (err) {
-                                throw err;
-                            } else {
+        if (model === 'ck') {
+            if (''){
 
-                            }
-                        }
-                    );
-                } else if (model != 'rz') {
-                    db.collection('rz').insertOne(
-                        {
-                            类型: '入库',
-                            模块: mk[model],
-                            时间: new Date(),
-                            用户: req.body.user,
-                            货号: req.body._id,
-                        },
-                        (err, result) => {
-                            if (err) {
-                                throw err;
-                            } else {
-
-                            }
-                        }
-                    );
-                }
             }
-        });
+        } else {
+            delete req.body.path;
+            db.collection(model).insertOne(req.body, function (err, result) {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(result);
+                    if (model === 'pd') {
+                        db.collection('rz').insertOne(
+                            {
+                                类型: '盘点',
+                                模块: mk[model],
+                                时间: new Date(),
+                                用户: req.body.user,
+                            },
+                            (err, result) => {
+                                if (err) {
+                                    throw err;
+                                } else {
+
+                                }
+                            }
+                        );
+                    } else if (model != 'rz') {
+                        db.collection('rz').insertOne(
+                            {
+                                类型: '入库',
+                                模块: mk[model],
+                                时间: new Date(),
+                                用户: req.body.user,
+                                货号: req.body._id,
+                            },
+                            (err, result) => {
+                                if (err) {
+                                    throw err;
+                                } else {
+
+                                }
+                            }
+                        );
+                    }
+                }
+            });
+        }
     })
     .put(function (req, res) {
 

@@ -115,18 +115,18 @@
         },
         created () {
             this.columns = this.$store.getters.spColumns;
-            this.data = this.$store.state.zb.sp;
+            this.data = this.$store.state.zb.sp.filter((item) => item.状态==='在库');
         },
         methods: {
             sm () {
-                let target = _.findWhere(this.data, {'条码号': Number.parseInt(this.m)});
+                let target = _.findWhere(this.data, {'条码号': this.m});
                 if (target) {
                     this.$Message.success(target.名称 + '盘点成功');
                     this.data.splice(this.data.indexOf(target), 1);
                     this.okData.push(target);
                     this.m = '';
                 } else {
-                    let target2 = _.findWhere(this.okData, {'条码号': Number.parseInt(this.m)});
+                    let target2 = _.findWhere(this.okData, {'条码号': this.m});
                     if (target2) {
                         this.$Message.info(target2.名称 + '已被盘点');
                     } else {

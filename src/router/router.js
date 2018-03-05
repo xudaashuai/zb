@@ -154,7 +154,7 @@ export const appRouter = [
                 path: 'ck',
                 title: '出库',
                 name: 'Inventory Manage2',
-                component: () => import('@/views/inventory-browsing/xq/main.vue')
+                component: () => import('@/views/kcgl/ck/main.vue')
             },
             {
                 path: 'kcpd',
