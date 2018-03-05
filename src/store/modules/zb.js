@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost：8080/';
+axios.defaults.baseURL = 'http://localhost:8081/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function zbDataCreate () {
@@ -330,8 +330,10 @@ const zb = {
             });
         },
         get (content, data) {
+            console.log(data)
             return new Promise((resolve, reject) => {
                 axios.get('/' + data.path).then(res => {
+                    console.log(res)
                     if (res.data.errmsg) {
                         reject('错误代码' + res.data.code);
                     } else {

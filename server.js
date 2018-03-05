@@ -3,7 +3,7 @@ var app = express();
 var http=require('http')
 var server = http.Server(app);
 var path = require('path');
-server.listen(8080);
+server.listen(8081);
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://120.25.75.23:27017/data';
@@ -44,6 +44,7 @@ app.route('/:model')
         db.collection(model).find({}).toArray(function (err, result) {
             if (err) {
                 res.json(err);
+                console.log(err)
             } else {
                 res.json(result);
             }
@@ -61,6 +62,7 @@ app.route('/:model')
             db.collection(model).insertOne(req.body, function (err, result) {
                 if (err) {
                     res.json(err);
+                    console.log(err)
                 } else {
                     res.json(result);
                     if (model === 'pd') {
@@ -74,6 +76,7 @@ app.route('/:model')
                             (err, result) => {
                                 if (err) {
                                     throw err;
+                                    console.log(err)
                                 } else {
 
                                 }
@@ -91,6 +94,7 @@ app.route('/:model')
                             (err, result) => {
                                 if (err) {
                                     throw err;
+                                    console.log(err)
                                 } else {
 
                                 }
