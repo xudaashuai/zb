@@ -1,8 +1,9 @@
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);
+var http=require('http')
+var server = http.Server(app);
 var path = require('path');
-server.listen(80);
+server.listen(8081);
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://120.25.75.23:27017/data';
@@ -35,7 +36,7 @@ let mk = {
     pj: '配件',
     pd: '盘点',
     rz: '日志',
-    yl:'原料'
+    yl: '原料'
 };
 app.route('/:model')
     .get(function (req, res) {
@@ -52,7 +53,7 @@ app.route('/:model')
         let model = req.params.model;
         console.log(req);
         if (model === 'ck') {
-            if (''){
+            if ('') {
 
             }
         } else {
@@ -103,3 +104,12 @@ app.route('/:model')
     .put(function (req, res) {
 
     });
+var app2=express()
+http.Server(app2).listen(8080)
+app2.get('/*', function (req, res) {
+    if (req.originalUrl === '/') {
+        res.sendFile(__dirname + '/dist/index.html');
+    } else {
+        res.sendFile(__dirname + '/dist' + req.originalUrl);
+    }
+});
