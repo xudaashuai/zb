@@ -9,7 +9,7 @@
                  row-hover-color="#eee"
                  row-click-color="#edf7ff"
                  odd-bg-color="#fafafa"
-               :table-data="data"></v-table>
+                 :table-data="data"></v-table>
     </Card>
 </template>
 <script>
@@ -17,20 +17,23 @@
 
     export default {
         data: function () {
-            return {
-            };
+            return {};
         },
-        props:['path'],
+        props: {
+            path:{
+                default:'sp'
+            }
+        },
         computed: {
-            ...mapGetters({columns: 'sjkColumns'}),
+            ...mapGetters({columns: this.path + 'Columns'}),
             ...mapState({
-                data: (state) => state.zb.sjk
+                data: (state) => state.zb[this.path]
             })
         },
         mounted () {
         },
         created () {
-            this.$store.dispatch('get', {path: 'sjk'}).then(
+            this.$store.dispatch('get', {path: this.path}).then(
                 () => this.$Message.success('加载数据成功'),
                 () => this.$Message.error('加载数据失败')
             );

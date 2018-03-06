@@ -1,4 +1,8 @@
 import Cookies from 'js-cookie';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:8081/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const user = {
     state: {},
@@ -19,7 +23,41 @@ const user = {
             if (theme) {
                 localStorage.theme = theme;
             }
+        },
+        login (state, user) {
+            state.user = user;
         }
+    },
+    actions: {
+        login (context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/login', data).then((res) => {
+                    if (!res.data) {
+                        reject('登录失败，请检查用户名与密码');
+                    } else {
+                        context.commit('login', res.data);
+                        Cookies.set('user', res.data.username);
+                        Cookies.set('password', res.data.password);
+                        resolve(res.data);
+                    }
+                }).catch(err => reject(err));
+            });
+        },
+        password (context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/password', {
+                    ...data,
+                    username: Cookies.get('user')
+                }).then((res) => {
+                    if (!res.data.nModified) {
+                        reject('密码错误啦');
+                    } else {
+                        resolve('修改成功');
+                        Cookies.set('password', data.newPass);
+                    }
+                }).catch(err => reject(err));
+            });
+        },
     }
 };
 

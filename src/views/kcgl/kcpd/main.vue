@@ -114,8 +114,8 @@
             };
         },
         created () {
-            this.columns = this.$store.getters.spColumns;
-            this.data = this.$store.state.zb.sp.filter((item) => item.状态==='在库');
+            this.columns = this.$store.getters.ezColumns;
+            this.data = this.$store.getters.allData;
         },
         methods: {
             sm () {
@@ -157,7 +157,7 @@
                 });
             },
             restart () {
-                this.data = this.$store.state.zb.sp;
+                this.data = this.$store.getters.allData;
                 this.okData = [];
             }
         }

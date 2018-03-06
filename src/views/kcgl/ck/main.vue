@@ -1,35 +1,48 @@
 <template>
     <Card>
         <Form :model="form" ref="form" :label-width="80">
-            <FormItem label="类别" prop="类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Select v-model="form.类别">
+            <FormItem label="出库原因" prop="出库原因" :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
+                <Select v-model="form.出库原因">
                     <Option v-for="item in ckType" :key="item" :value="item">{{item}}</Option>
                 </Select>
+            </FormItem>
+            <FormItem label="员工" prop="员工"
+                      :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="text" v-model="form.员工"></Input>
             </FormItem>
             <FormItem disabled label="日期" prop="日期"
                       :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
                 <DatePicker type="date" v-model="form.日期"></DatePicker>
             </FormItem>
-            <FormItem label="物品类别" prop="物品类别" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+            <FormItem label="物品类别" prop="物品类别" :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
                 <Select v-model="form.物品类别">
                     <Option v-for="item in wpType" :key="item" :value="item">{{item}}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="数量" prop="数量"
-                      :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="number" v-model="form.数量"></Input>
-            </FormItem>
-            <FormItem v-if="form.物品类别==='商品'" label="条形码" prop="条形码"
-                      :rules="{type:'array',required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Select v-model="form.条形码" filterable multiple>
+
+            <FormItem v-if="form.物品类别==='商品'" label="物品" prop="物品"
+                      :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
+                <Select v-model="form.物品" filterable>
                     <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
                         <span style="float:right;color:#ccc">{{item.条码号}}</span>
                     </Option>
                 </Select>
             </FormItem>
-            <FormItem v-if="form.类别==='出售'" label="售价" prop="售价"
+            <FormItem v-if="form.物品类别==='配件或原料'" label="物品" prop="物品"
+                      :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
+                <Select v-model="form.物品" filterable>
+                    <Option v-for="item,index in otherData" :value="item.名称" :key="item.名称"><span>{{item.名称}}</span>
+                        <span style="float:right;color:#ccc">{{item.重量}}g</span>
+                    </Option>
+                </Select>
+            </FormItem>
+            <FormItem v-if="form.物品类别!=='商品'" label="重量" prop="重量"
+                      :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="number" v-model.number="form.重量"></Input>
+            </FormItem>
+            <FormItem v-if="form.出库原因==='出售'" label="售价" prop="售价"
                       :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="number" v-model="form.售价"></Input>
+                <Input type="number" v-model.number="form.售价"></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="handleSubmit('form')">添加</Button>
@@ -40,6 +53,7 @@
 </template>
 <script>
     import {mapState} from 'vuex';
+    import _ from 'underscore';
 
     export default {
         data () {
@@ -47,15 +61,14 @@
                 type: -1,
                 form: {
                     path: 'ck',
-                    类别: '',
                     物品类别: '',
                     出库物品: '',
                     出库原因: '',
-                    数量: '',
-                    售价: '',
-                    条形码: [],
+                    重量: 0,
+                    售价: 0,
+                    物品: '',
                     日期: new Date(),
-                    人员: ''
+                    员工: ''
                 },
                 ckType: [
                     '出售',
@@ -63,9 +76,8 @@
                     '其他',
                 ],
                 wpType: [
-                    '原料',
+                    '配件或原料',
                     '商品',
-                    '配件'
                 ]
             };
         },
@@ -75,25 +87,40 @@
                 uType: state => state.zb.uType,
             }),
             ...mapState({
-                data: (state) => state.zb.sp
-            })
+                data: (state) => state.zb.sp.concat(state.zb.xql).concat(state.zb.sjk).filter((item) => item.状态 === '在库'),
+                otherData: (state) => state.zb.pj.concat(state.zb.yl).filter((item) => item.状态 === '在库'),
+            }),
+            selectItem () {
+                let t = _.findWhere(this.otherData, {名称: this.form.物品});
+                if (t) {
+                    return Number.parseInt(t.重量);
+                } else {
+                    return 9999999999;
+                }
+            }
         },
         methods: {
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.info('正在出库');
-                        this.form._id = this.form.货号;
-                        this.$store.dispatch('ck', this.form).then((res) => {
-                            console.log(res);
-                            this.$Message.success('出库成功!');
-                        }, (err) => {
-                            this.$Message.error(err);
-                        });
-                    } else {
-                        this.$Message.error('表单信息不完整');
+                        if (valid) {
+                            if (this.form.物品类别 === '配件或原料' && (this.form.重量 > this.selectItem || this.form.重量 <= 0)) {
+                                this.$Message.error('重量不对哦');
+                            } else {
+                                this.$Message.info('正在出库');
+                                this.form._id = this.form.货号;
+                                this.$store.dispatch('ck', this.form).then((res) => {
+                                    console.log(res);
+                                    this.$Message.success('出库成功!');
+                                }, (err) => {
+                                    this.$Message.error(err);
+                                });
+                            }
+                        }
+                        else {
+                            this.$Message.error('表单信息不完整');
+                        }
                     }
-                });
+                );
             },
             handleReset (name) {
                 this.$refs[name].resetFields();

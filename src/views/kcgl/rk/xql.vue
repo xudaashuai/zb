@@ -33,13 +33,13 @@
         <FormItem>
             <Row>
                 <Col span="12">
-                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加 配石</Button>
+                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加配石</Button>
                 </Col>
             </Row>
         </FormItem>
         <FormItem>
-            <Button type="primary" @click="handleSubmit('form')">Submit</Button>
-            <Button type="ghost" @click="handleReset('form')" style="margin-left: 8px">Reset</Button>
+            <Button type="primary" @click="handleSubmit('form')">入库</Button>
+            <Button type="ghost" @click="handleReset('form')" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
 </template>
@@ -48,7 +48,7 @@
         data () {
             return {
                 form: {
-                    path:'xql',
+                    path: 'xql',
                     配石: [
                         ''
                     ],

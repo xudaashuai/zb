@@ -8,6 +8,7 @@ const app = {
         cachePage: [],
         lang: '',
         isFullScreen: false,
+        adminMode: false,
         openedSubmenuArr: [], // 要展开的菜单数组
         menuTheme: 'dark', // 主题
         themeColor: '',
@@ -36,6 +37,9 @@ const app = {
     mutations: {
         setTagsList (state, list) {
             state.tagsList.push(...list);
+        },
+        changeAdminMode (state) {
+            state.adminMode = !state.adminMode;
         },
         updateMenulist (state) {
             let accessCode = parseInt(Cookies.get('access'));
