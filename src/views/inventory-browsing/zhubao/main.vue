@@ -2,7 +2,7 @@
     <Card class="card">
         <Tabs value="全部">
             <TabPane label="全部" name="全部">
-                <v-table
+                <v-table ref="table"
                         is-vertical-resize
                         style="width:100%"
                         is-horizontal-resize
@@ -15,7 +15,7 @@
                         :table-data="allData"></v-table>
             </TabPane>
             <TabPane v-for="type in mType" :label="type" :key="type" :name="type">
-                <v-table is-vertical-resize
+                <v-table ref="table" is-vertical-resize
                          style="width:100%"
                          is-horizontal-resize
                          :vertical-resize-offset='40'

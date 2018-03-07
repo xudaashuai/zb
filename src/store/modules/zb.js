@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8081/';
+axios.defaults.baseURL = 'http://120.25.75.23:8081/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function zbDataCreate () {
@@ -65,7 +65,7 @@ const zb = {
         }
     },
     getters: {
-        spColumns (state) {
+        spColumns (state, getters, rootState) {
             return [
                 {
                     'key': '名称',
@@ -145,7 +145,7 @@ const zb = {
                     'field': '进货日期',
                     'overflowTitle': true
                 },
-                {
+                rootState.app.adminMode ? {
                     'key': '进货价',
                     'title': '进货价',
                     'sortable': true,
@@ -155,7 +155,7 @@ const zb = {
                     'isResize': true,
                     'field': '进货价',
                     'overflowTitle': true
-                },
+                } : undefined,
                 {
                     'key': '标价',
                     'title': '标价',
@@ -211,9 +211,9 @@ const zb = {
                     'field': '状态',
                     'overflowTitle': true
                 }
-            ];
+            ].filter(item => item);
         },
-        xqlColumns (state) {
+        xqlColumns (state, getters, rootState) {
             return [
                 {
                     'key': '名称',
@@ -250,6 +250,17 @@ const zb = {
                     'field': '进货日期',
                     'overflowTitle': true
                 },
+                rootState.app.adminMode ? {
+                    'key': '进货价',
+                    'title': '进货价',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '进货价',
+                    'overflowTitle': true
+                } : undefined,
                 {
                     'key': '主石',
                     'title': '主石',
@@ -283,9 +294,9 @@ const zb = {
                     'field': '标价',
                     'overflowTitle': true
                 },
-            ];
+            ].filter(item => item);
         },
-        pjColumns (state) {
+        pjColumns (state, getters, rootState) {
             return [
                 {
                     'key': '名称',
@@ -310,7 +321,7 @@ const zb = {
                     'field': '重量',
                     'overflowTitle': true
                 },
-                {
+                rootState.app.adminMode ? {
                     'key': '进货价',
                     'title': '进货价',
                     'sortable': true,
@@ -320,7 +331,7 @@ const zb = {
                     'isResize': true,
                     'field': '进货价',
                     'overflowTitle': true
-                },
+                } : undefined,
                 {
                     'key': '进货日期',
                     'title': '进货日期',
@@ -353,9 +364,9 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }];
+                }].filter(item => item);
         },
-        sjkColumns (state) {
+        sjkColumns (state, getters, rootState) {
             return [
                 {
                     'key': '名称',
@@ -402,6 +413,17 @@ const zb = {
                     'field': '证书号',
                     'overflowTitle': true
                 },
+                rootState.app.adminMode ? {
+                    'key': '进货价',
+                    'title': '进货价',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '进货价',
+                    'overflowTitle': true
+                } : undefined,
                 {
                     'key': '进货日期',
                     'title': '进货日期',
@@ -445,9 +467,9 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }];
+                }].filter(item => item);
         },
-        ylColumns (state) {
+        ylColumns (state, getters, rootState) {
             return [
                 {
                     'key': '名称',
@@ -482,7 +504,7 @@ const zb = {
                     'field': '进货日期',
                     'overflowTitle': true
                 },
-                {
+                rootState.app.adminMode ? {
                     'key': '进货价',
                     'title': '进货价',
                     'sortable': true,
@@ -492,7 +514,7 @@ const zb = {
                     'isResize': true,
                     'field': '进货价',
                     'overflowTitle': true
-                },
+                } : undefined,
                 {
                     'key': '状态',
                     'title': '状态',
@@ -504,9 +526,9 @@ const zb = {
                     'field': '状态',
                     'overflowTitle': true
                 }
-            ];
+            ].filter(item => item);
         },
-        pdColumns (state) {
+        pdColumns (state, getters, rootState) {
             return [
                 {
                     'key': '盘点时间',
@@ -587,7 +609,7 @@ const zb = {
                 },
             ];
         },
-        rzColumns (state) {
+        rzColumns (state, getters, rootState) {
             return [
                 {
                     'key': '类型',
@@ -598,8 +620,10 @@ const zb = {
                     'columnAlign': 'center',
                     'field': '类型',
                     'filterMultiple': true,
-                    'filters': [{'label': '入库', 'value': '入库'},
-                        {'label': '出库', 'value': '出库'}]
+                    'filters': [
+                        {'label': '入库', 'value': '入库'},
+                        {'label': '出库', 'value': '出库'}
+                    ]
                 },
                 {
                     'title': '时间',
@@ -677,9 +701,9 @@ const zb = {
                 }
             ];
         },
-        allData: (state) => state.sp.concat(state.xql).concat(state.sjk).filter((item) => item.状态 === '在库'),
-        otherData: (state) => state.pj.concat(state.yl).filter((item) => item.状态 === '在库'),
-        typeData: (state) => (type) => state.sp.filter((item) => item['材质'] === type),
+        allData: (state, getters, rootState) => state.sp.concat(state.xql).concat(state.sjk).filter((item) => item.状态 === '在库'),
+        otherData: (state, getters, rootState) => state.pj.concat(state.yl).filter((item) => item.状态 === '在库'),
+        typeData: (state, getters, rootState) => (type) => state.sp.filter((item) => item['材质'] === type),
     },
     actions: {
         init (context, data) {

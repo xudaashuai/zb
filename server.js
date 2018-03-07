@@ -128,6 +128,56 @@ app.route('/:model')
                 });
             }
         }
+        /*
+        todo 配件和原料的入库累加在遇到价格不同时的处理
+        else if (model === 'pj' || model === 'yl') {
+            delete req.body.path;
+            db.collection(model).updateOne(req.body, function (err, result) {
+                if (err) {
+                    res.json(err);
+                    console.log(err);
+                } else {
+                    res.json(result);
+                    if (model === 'pd') {
+                        db.collection('rz').insertOne(
+                            {
+                                类型: '盘点',
+                                模块: mk[model],
+                                时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                员工: req.body.user,
+                            },
+                            (err, result) => {
+                                if (err) {
+                                    throw err;
+                                    console.log(err);
+                                } else {
+
+                                }
+                            }
+                        );
+                    } else if (model != 'rz') {
+                        db.collection('rz').insertOne(
+                            {
+                                类型: '入库',
+                                模块: mk[model],
+                                时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                员工: req.body.user,
+                                物品: req.body._id,
+                            },
+                            (err, result) => {
+                                if (err) {
+                                    throw err;
+                                    console.log(err);
+                                } else {
+
+                                }
+                            }
+                        );
+                    }
+                }
+            });
+        }
+        */
         else if (model === 'login') {
             db.collection('user').findOne(req.body, (err, result) => {
                 if (err) {
@@ -141,7 +191,7 @@ app.route('/:model')
             db.collection('user').updateOne({
                 username: req.body.username,
                 password: req.body.oldPass,
-            },{$set:{password:req.body.newPass}}, (err, result) => {
+            }, {$set: {password: req.body.newPass}}, (err, result) => {
                 if (err) {
                     res.json(err);
                 } else {

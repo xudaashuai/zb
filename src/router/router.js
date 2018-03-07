@@ -198,12 +198,6 @@ export const appRouter = [
                 name: 'sj',
                 component: () => import('@/views/sjtj/sjtj.vue')
             },
-            {
-                path: 'sjt',
-                title: '数据统计',
-                name: 'sjt',
-                component: () => import('@/views/sjtj/sjtj.vue')
-            },
         ]
     },
     /*{

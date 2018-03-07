@@ -20,11 +20,12 @@
 
     export default {
         name: 'adminMode',
-        data(){
+        data () {
             return {
-                modal:false
-            }
+                modal: false
+            };
         },
+        props: ['intoAdminMode'],
         computed: {
             ...mapState({
                 adminMode: (state) => state.app.adminMode
@@ -35,11 +36,12 @@
                 if (this.adminMode) {
                     this.$store.commit('changeAdminMode');
                 } else {
-                    this.modal=true
+                    this.modal = true;
                 }
             },
-            ok(){
+            ok () {
                 this.$store.commit('changeAdminMode');
+                this.intoAdminMode();
             }
         },
         mounted () {

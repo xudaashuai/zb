@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8081/';
+axios.defaults.baseURL = 'http://120.25.75.23:8081/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const user = {

@@ -1,8 +1,14 @@
 <template>
-    <Form :model="form" ref="form"  :label-width="80">
+    <Form :model="form" ref="form" :label-width="80">
 
         <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="text" v-model="form.名称"></Input>
+            <AutoComplete
+                    v-model="form.名称"
+                    @on-search="handleSearch"
+                    style="width:200px">
+                <Option v-for="item in searchData" :value="item.名称" :key="item.名称"><span>{{item.名称}}</span>
+                    <span style="float:right;color:#ccc">{{item.重量}}g</span></Option>
+            </AutoComplete>
         </FormItem>
         <FormItem label="重量" prop="重量" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model="form.重量"></Input>
@@ -30,13 +36,14 @@
             return {
                 type: -1,
                 form: {
-                    path:'pj',
+                    path: 'pj',
                     名称: '',
                     重量: '',
                     进货价: '',
                     进货日期: new Date(),
                     标价: '',
                     规格: '',
+                    searchData: []
                 },
             };
         },
@@ -65,6 +72,9 @@
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+            handleSearch (value) {
+                return this.searchData = this.$store.state.zb.pj.filter((item) => item.名称.indexOf(value) > -1);
             }
         }
     };
