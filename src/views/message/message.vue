@@ -213,10 +213,6 @@ export default {
     },
     mounted () {
         this.currentMesList = this.unreadMesList = [
-            {
-                title: '欢迎登录珠宝库存管理系统',
-                time: 1507390106000
-            }
         ];
         this.hasreadMesList = [
         ];

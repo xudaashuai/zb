@@ -1,49 +1,8 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-axios.defaults.baseURL = 'http://120.25.75.23:8081/';
+axios.defaults.baseURL = 'http://localhost:8081/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
-
-function zbDataCreate () {
-    let mType = ['和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡'];
-    let uType = ['挂件', '手镯', '把件', '摆件', '珠链'];
-    let data = [];
-    for (let i = 0; i < 100; i++) {
-        data.push({
-                货号: 's' + i,
-                名称: 'null',
-                条码号: 10000000 + Math.floor(Math.random() * 10000000),
-                材质: mType[i % mType.length],
-                类型: uType[i % uType.length],
-                品牌: '福顺和',
-                证书号: i * 1203124 + i * 10000000,
-                单位: '件',
-                价格: Math.floor(Math.random() * 10000)
-            }
-        );
-    }
-    return data;
-}
-
-function sjDataCreate () {
-    let mType = ['和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡'];
-    let uType = ['挂件', '手镯', '把件', '摆件', '珠链'];
-    let data = [];
-    for (let i = 0; i < 100; i++) {
-        data.push({
-                编号: 's' + i,
-                条形码: 10000000 + Math.floor(Math.random() * 10000000),
-                材质: mType[i % mType.length],
-                类型: uType[i % uType.length],
-                品牌: '福顺和',
-                证书号: i * 1203124 + i * 10000000,
-                单位: '件',
-                价格: Math.floor(Math.random() * 10000),
-                图片: ''
-            }
-        );
-    }
-    return data;
-}
 
 const zb = {
     state: {
@@ -58,6 +17,7 @@ const zb = {
         pj: [],
         rz: [],
         pd: [],
+        user: [],
     },
     mutations: {
         set (state, data) {
@@ -210,7 +170,18 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }
+                },
+                {
+                    'key': '备注',
+                    'title': '备注',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '备注',
+                    'overflowTitle': true
+                },
             ].filter(item => item);
         },
         xqlColumns (state, getters, rootState) {
@@ -270,7 +241,10 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '主石',
-                    'overflowTitle': true
+                    'overflowTitle': true,
+                    formatter: function (rowData, rowIndex, pagingIndex, field) {
+                        return rowData[field].名称 + rowData[field].重量 + 'g';
+                    }
                 },
                 {
                     'key': '配石',
@@ -281,7 +255,7 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '配石',
-                    'overflowTitle': true
+                    componentName:'items-view2'
                 },
                 {
                     'key': '标价',
@@ -292,6 +266,17 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '标价',
+                    'overflowTitle': true
+                },
+                {
+                    'key': '备注',
+                    'title': '备注',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '备注',
                     'overflowTitle': true
                 },
             ].filter(item => item);
@@ -344,14 +329,14 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
-                    'key': '克价',
-                    'title': '克价',
+                    'key': '标价',
+                    'title': '标价',
                     'sortable': true,
                     'width': 120,
                     'titleAlign': 'center',
                     'columnAlign': 'center',
                     'isResize': true,
-                    'field': '克价',
+                    'field': '标价',
                     'overflowTitle': true
                 },
                 {
@@ -364,7 +349,18 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }].filter(item => item);
+                },
+                {
+                    'key': '备注',
+                    'title': '备注',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '备注',
+                    'overflowTitle': true
+                },].filter(item => item);
         },
         sjkColumns (state, getters, rootState) {
             return [
@@ -400,7 +396,8 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '组成',
-                    'overflowTitle': true
+                    'overflowTitle': true,
+                    componentName: 'items-view'
                 },
                 {
                     'key': '证书号',
@@ -447,17 +444,6 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
-                    'key': '主石',
-                    'title': '主石',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '主石',
-                    'overflowTitle': true
-                },
-                {
                     'key': '状态',
                     'title': '状态',
                     'sortable': true,
@@ -467,7 +453,30 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }].filter(item => item);
+                },
+                {
+                    'key': '图片',
+                    'title': '图片',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '图片',
+                    'overflowTitle': true,
+                    componentName: 'image-view'
+                },
+                {
+                    'key': '备注',
+                    'title': '备注',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '备注',
+                    'overflowTitle': true
+                },].filter(item => item);
         },
         ylColumns (state, getters, rootState) {
             return [
@@ -514,7 +523,17 @@ const zb = {
                     'isResize': true,
                     'field': '进货价',
                     'overflowTitle': true
-                } : undefined,
+                } : undefined, {
+                    'key': '标价',
+                    'title': '标价',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '标价',
+                    'overflowTitle': true
+                },
                 {
                     'key': '状态',
                     'title': '状态',
@@ -525,7 +544,18 @@ const zb = {
                     'isResize': true,
                     'field': '状态',
                     'overflowTitle': true
-                }
+                },
+                {
+                    'key': '备注',
+                    'title': '备注',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '备注',
+                    'overflowTitle': true
+                },
             ].filter(item => item);
         },
         pdColumns (state, getters, rootState) {
@@ -538,7 +568,7 @@ const zb = {
                     'titleAlign': 'center',
                     'columnAlign': 'center',
                     'isResize': true,
-                    'field': '盘点时间',
+                    'field': '进货日期',
                     'overflowTitle': true
                 },
                 {
@@ -594,7 +624,8 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '缺失项目',
-                    'overflowTitle': true
+                    'overflowTitle': true,
+                    componentName: 'items-view'
                 },
                 {
                     'key': '备注',
@@ -656,8 +687,8 @@ const zb = {
                         {'label': '原料', 'value': '原料'}]
                 },
                 {
-                    'title': '货号',
-                    'field': '货号',
+                    'title': '物品',
+                    'field': '物品',
                     'overflowTitle': true,
                     'width': 120,
                     'titleAlign': 'center',
@@ -665,8 +696,8 @@ const zb = {
                     'isResize': true
                 },
                 {
-                    'title': '用户',
-                    'field': '用户',
+                    'title': '员工',
+                    'field': '员工',
                     'overflowTitle': true,
                     'width': 120,
                     'titleAlign': 'center',
@@ -698,7 +729,14 @@ const zb = {
                     sortable: true,
                     width: 120, titleAlign: 'center', columnAlign: 'center', isResize: true,
                     field: '进货日期'
-                }
+                },
+                {
+                    key: '标价',
+                    title: '标价',
+                    sortable: true,
+                    width: 120, titleAlign: 'center', columnAlign: 'center', isResize: true,
+                    field: '标价'
+                },
             ];
         },
         allData: (state, getters, rootState) => state.sp.concat(state.xql).concat(state.sjk).filter((item) => item.状态 === '在库'),
@@ -712,14 +750,40 @@ const zb = {
             }
         },
         add (context, data) {
+            console.log(data);
+            data.user = Cookies.get('user');
+            data.进货日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+            if (data.path !== 'pd') {
+                data.状态 = '在库';
+            }
             return new Promise((resolve, reject) => {
-                if (data.进货日期) {
-                    data.进货日期 = data.进货日期.toLocaleDateString();
-                }
-                if (data.path !== 'pd') {
-                    data.状态 = '在库';
-                }
                 axios.post('/' + data.path, data).then(res => {
+                    if (res.data.errmsg) {
+                        if (res.data.code === 11000) {
+                            reject('已存在');
+                        } else {
+                            reject('错误代码' + res.data.code);
+                        }
+                    } else {
+                        resolve(res.data);
+                        context.dispatch('get', {
+                            path: data.path
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+        },
+        remove (context, data) {
+            data.user = Cookies.get('user');
+            data.进货日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+            return new Promise((resolve, reject) => {
+                if (data.path === 'user' && data._id === 'admin') return;
+                axios.post('/delete', {
+                    _id: data._id
+                }).then(res => {
                     if (res.data.errmsg) {
                         if (res.data.code === 11000) {
                             reject('该商品已存在');
@@ -728,11 +792,18 @@ const zb = {
                         }
                     } else {
                         resolve(res.data);
+                        context.dispatch('get', {
+                            path: data.path
+                        });
                     }
-                }).catch(err => reject(err));
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
             });
         },
         ck (context, data) {
+            data.user = Cookies.get('username');
             return new Promise((resolve, reject) => {
                 axios.post('/' + data.path, data).then(res => {
                     if (res.data.errmsg) {
@@ -756,7 +827,6 @@ const zb = {
                         reject('错误代码' + res.data.code);
                     } else {
                         context.commit('set', {path: data.path, data: res.data});
-                        console.log(JSON.stringify(context.getters[data.path + 'Columns']));
                         resolve();
                     }
                 }).catch(err => reject(err));

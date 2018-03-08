@@ -7,9 +7,6 @@
             </p>
             <div style="">
                 <Form :model="form" :label-width="120">
-                    <FormItem label="盘点时间">
-                        <DatePicker v-model="form.盘点时间" disabled></DatePicker>
-                    </FormItem>
                     <FormItem label="总盘点数目">
                         <Input type="number" v-model="form.总盘点数目" placeholder="" disabled></Input>
                     </FormItem>
@@ -20,8 +17,8 @@
                         <Input type="number" v-model="form.缺失数目" placeholder="" disabled></Input>
                     </FormItem>
                     <FormItem label="缺失项目">
-                        <Select v-model="缺失项目" multiple>
-                            <Option v-for="item in form.缺失项目" :value="item.条码号" :key="item.条码号">{{ item.名称 }}
+                        <Select v-model="form.缺失项目" multiple>
+                            <Option v-for="item in data" :value="item.条码号" :key="item.条码号">{{ item.名称 }}
                             </Option>
                         </Select>
                     </FormItem>
@@ -37,16 +34,17 @@
                 <Button type="primary" size="large" long @click="ok">确定</Button>
             </div>
         </Modal>
-        <Col span="16" style="padding-bottom: 10px">
-        <Form @submit.native.prevent="sm">
-            <Input type="text" v-model="m" placeholder="输入条码号或使用扫码枪扫码"></Input></Form>
-        </Col>
-        <Col span="4">
-        <Button type="info" long @click="finish">盘点结束</Button>
-        </Col>
-        <Col span="4">
-        <Button type="error" long @click="restart">重新盘点</Button>
-        </Col>
+            <Col span="16" style="padding-bottom: 10px">
+                <Form @submit.native.prevent="sm">
+                    <Input type="text" v-model="m" placeholder="输入条码号或使用扫码枪扫码"></Input>
+                </Form>
+            </Col>
+            <Col span="4">
+                <Button type="info" long @click="finish">盘点结束</Button>
+            </Col>
+            <Col span="4">
+                <Button type="error" long @click="restart">重新盘点</Button>
+            </Col>
         <Col span="12">
         <Card>
             <p slot="title">
@@ -96,7 +94,6 @@
             return {
                 form: {
                     path: 'pd',
-                    盘点时间: new Date(),
                     总盘点数目: 0,
                     盘点成功数目: 0,
                     缺失数目: 0,
@@ -105,7 +102,6 @@
                     备注: '',
                     缺失项目条码号: ''
                 },
-                缺失项目: [],
                 modal: false,
                 m: '',
                 columns: [],
@@ -137,14 +133,11 @@
             finish () {
                 this.form.缺失项目 = [];
                 for (let item of this.data) {
-                    this.form.缺失项目.push(item);
+                    this.form.缺失项目.push(item.条码号);
                 }
                 this.form.总盘点数目 = this.data.length + this.okData.length;
                 this.form.缺失数目 = this.data.length;
                 this.form.盘点成功数目 = this.okData.length;
-                this.缺失项目 = _.map(this.data, function (item) {
-                    return item.条码号;
-                });
                 this.modal = true;
             },
             ok () {

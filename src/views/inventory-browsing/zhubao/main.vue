@@ -2,7 +2,7 @@
     <Card class="card">
         <Tabs value="全部">
             <TabPane label="全部" name="全部">
-                <v-table ref="table"
+                <v-table v-if="show" ref="table"
                         is-vertical-resize
                         style="width:100%"
                         is-horizontal-resize
@@ -15,7 +15,7 @@
                         :table-data="allData"></v-table>
             </TabPane>
             <TabPane v-for="type in mType" :label="type" :key="type" :name="type">
-                <v-table ref="table" is-vertical-resize
+                <v-table v-if="show"  ref="table" is-vertical-resize
                          style="width:100%"
                          is-horizontal-resize
                          :vertical-resize-offset='40'
@@ -40,7 +40,8 @@
         computed: {
             ...mapGetters(['spColumns']),
             ...mapState({
-                mType: state => state.zb.mType
+                mType: state => state.zb.mType,
+                show: state => state.app.show
             }),
             data: function () {
                 let t = {};

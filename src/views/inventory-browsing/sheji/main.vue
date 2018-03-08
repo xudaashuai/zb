@@ -1,6 +1,6 @@
 <template>
     <Card class="card">
-        <v-table highlight-row stripe class="table" border :columns="columns"
+        <v-table v-if="show" highlight-row stripe class="table" border :columns="columns"
                  is-vertical-resize
                  style="width:100%"
                  is-horizontal-resize
@@ -24,7 +24,8 @@
         computed: {
             ...mapGetters({columns: 'sjkColumns'}),
             ...mapState({
-                data: (state) => state.zb.sjk
+                data: (state) => state.zb.sjk,
+                show: state => state.app.show
             })
         },
         mounted () {

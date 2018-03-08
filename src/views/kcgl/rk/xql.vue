@@ -6,30 +6,52 @@
         <FormItem label="条码号" prop="条码号" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="text" v-model="form.条码号"></Input>
         </FormItem>
-        <FormItem label="标价" prop="标价" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.标价"></Input>
+        <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="number" v-model.number="form.标价"></Input>
         </FormItem>
-        <FormItem label="进货日期" prop="进货日期" :rules="{type: 'date',required: true, message: '不能为空哦', trigger: 'blur'}">
-            <DatePicker type="date" v-model="form.进货日期"></DatePicker>
+        <FormItem label="备注" prop="备注" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="textarea" v-model="form.设计理念"></Input>
         </FormItem>
-        <FormItem label="主石" prop="主石" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="text" v-model="form.主石"></Input>
-        </FormItem>
-        <FormItem
-                v-for="(item, index) in form.配石"
-                :key="index"
-                :label="'配石 ' + (index+1)"
-                :prop="'配石.' + index "
-                :rules="{required: true, message: '配石 ' + (index+1) +'不能为空', trigger: 'blur'}">
-            <Row>
-                <Col span="20">
-                <Input type="text" v-model="form.配石[index]" placeholder="输入配石信息"></Input>
-                </Col>
-                <Col span="3" offset="1">
-                <Button type="ghost" @click="handleRemove(index)">删除</Button>
-                </Col>
-            </Row>
-        </FormItem>
+        <Row>
+            <Col span="12">
+            <FormItem label="主石" prop="主石.名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+
+                <Input type="text" v-model="form.主石.名称" placeholder="输入主石信息"></Input>
+            </FormItem>
+            </Col>
+
+            <Col span="8">
+            <FormItem label="重量" prop="主石.重量"
+                      :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="text" v-model.number="form.主石.重量" placeholder="重量"></Input>
+            </FormItem>
+            </Col>
+        </Row>
+        <Row
+                v-for="(item, index) in form.配石" :key="index">
+            <Col span="12">
+            <FormItem
+                    :key="index"
+                    :label="'配石 ' + (index+1)"
+                    :prop="'配石.' + index +'.名称'"
+                    :rules="{required: true, message: '配石 ' + (index+1) +'不能为空', trigger: 'blur'}">
+
+                <Input type="text" v-model="item.名称" placeholder="输入配石信息"></Input>
+
+            </FormItem>
+            </Col>
+
+            <Col span="8">
+            <FormItem label="重量" :prop="'配石.' + index +'.重量'"
+                      :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+                <Input type="text" v-model.number="item.重量" placeholder="重量"></Input>
+            </FormItem>
+            </Col>
+
+            <Col span="3" offset="1">
+            <Button type="ghost" @click="handleRemove(index)">删除</Button>
+            </Col>
+        </Row>
         <FormItem>
             <Row>
                 <Col span="12">
@@ -49,14 +71,12 @@
             return {
                 form: {
                     path: 'xql',
-                    配石: [
-                        ''
-                    ],
+                    配石: [],
                     条码号: '',
                     名称: '',
-                    进货日期: new Date(),
                     标价: '',
-                    主石: ''
+                    主石: {},
+                    备注:''
                 }
             };
         },
@@ -81,7 +101,10 @@
                 this.$refs[name].resetFields();
             },
             handleAdd () {
-                this.form.配石.push('');
+                this.form.配石.push({
+                    重量: '',
+                    名称: '',
+                });
             },
             handleRemove (index) {
                 this.form.配石.splice(index, 1);

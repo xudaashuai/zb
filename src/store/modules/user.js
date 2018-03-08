@@ -36,8 +36,9 @@ const user = {
                         reject('登录失败，请检查用户名与密码');
                     } else {
                         context.commit('login', res.data);
-                        Cookies.set('user', res.data.username);
-                        Cookies.set('password', res.data.password);
+                        Cookies.set('user', res.data.username, { expires: 1 });
+                        Cookies.set('access', res.data.username === 'admin' ? 0 : 1, { expires: 1 });
+                        Cookies.set('password', res.data.password, { expires: 1 });
                         resolve(res.data);
                     }
                 }).catch(err => reject(err));
@@ -53,7 +54,7 @@ const user = {
                         reject('密码错误啦');
                     } else {
                         resolve('修改成功');
-                        Cookies.set('password', data.newPass);
+                        Cookies.set('password', data.newPass, { expires: 1 });
                     }
                 }).catch(err => reject(err));
             });

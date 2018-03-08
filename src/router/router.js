@@ -56,7 +56,7 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
-        {path: 'home', title: {i18n: 'home'}, name: 'home_index', component: () => import('@/views/home/home.vue')},
+        {path: 'home', title: '首页', name: 'home_index', component: () => import('@/views/home/home.vue')},
         {
             path: 'ownspace',
             title: '个人中心',
@@ -169,7 +169,7 @@ export const appRouter = [
         icon: 'cube',
         title: '日志记录',
         name: 'rzjl',
-        component: Main,
+        component: Main, access: 0,
         children: [
             {
                 path: 'kcrz',
@@ -182,6 +182,21 @@ export const appRouter = [
                 title: '盘点日志',
                 name: 'pdrz',
                 component: () => import('@/views/rzjl/pdrz.vue')
+            },
+        ]
+    },
+    {
+        path: '/yggl',
+        icon: 'cube',
+        title: '员工管理',
+        name: 'yggl', access: 0,
+        component: Main,
+        children: [
+            {
+                path: 'yg',
+                title: '员工管理',
+                name: 'yg',
+                component: () => import('@/views/yggl/yggl.vue')
             },
         ]
     },

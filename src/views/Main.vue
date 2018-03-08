@@ -181,9 +181,9 @@
             fullscreenChange (isFullScreen) {
                 // console.log(isFullScreen);
             },
-            intoAdminMode(){
-                console.log(this)
-                this.$broadcast('resize')
+            intoAdminMode () {
+                console.log('resize');
+                this.$emit('resize');
             }
         },
         watch: {

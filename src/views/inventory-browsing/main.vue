@@ -1,6 +1,6 @@
 <template>
     <Card class="card">
-        <v-table highlight-row stripe class="table" border :columns="columns"
+        <v-table v-if='show' ref="table" highlight-row stripe class="table" border :columns="columns"
                  is-vertical-resize
                  style="width:100%"
                  is-horizontal-resize
@@ -20,14 +20,15 @@
             return {};
         },
         props: {
-            path:{
-                default:'sp'
+            path: {
+                default: 'sp'
             }
         },
         computed: {
             ...mapGetters({columns: this.path + 'Columns'}),
             ...mapState({
-                data: (state) => state.zb[this.path]
+                data: (state) => state.zb[this.path],
+                show: (state) => state.app.show
             })
         },
         mounted () {

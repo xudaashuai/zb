@@ -6,9 +6,9 @@
                     <Option v-for="item in ckType" :key="item" :value="item">{{item}}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="员工" prop="员工"
+            <FormItem label="领用人" prop="领用人"
                       :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="text" v-model="form.员工"></Input>
+                <Input type="text" v-model="form.领用人"></Input>
             </FormItem>
             <FormItem disabled label="日期" prop="日期"
                       :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
@@ -68,7 +68,7 @@
                     售价: 0,
                     物品: '',
                     日期: new Date(),
-                    员工: ''
+                    领用人: ''
                 },
                 ckType: [
                     '出售',

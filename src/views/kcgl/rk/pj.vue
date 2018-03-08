@@ -1,26 +1,24 @@
 <template>
     <Form :model="form" ref="form" :label-width="80">
-
-        <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+        <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
             <AutoComplete
                     v-model="form.名称"
-                    @on-search="handleSearch"
-                    style="width:200px">
+                    @on-search="handleSearch">
                 <Option v-for="item in searchData" :value="item.名称" :key="item.名称"><span>{{item.名称}}</span>
                     <span style="float:right;color:#ccc">{{item.重量}}g</span></Option>
             </AutoComplete>
         </FormItem>
-        <FormItem label="重量" prop="重量" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.重量"></Input>
+        <FormItem label="重量" prop="重量" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="number" v-model.number="form.重量"></Input>
         </FormItem>
-        <FormItem label="进货日期" prop="进货日期" :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
-            <DatePicker type="date" v-model="form.进货日期"></DatePicker>
+        <FormItem label="进货价" prop="进货价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="number" v-model.number="form.进货价"></Input>
         </FormItem>
-        <FormItem label="进货价" prop="进货价" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.进货价"></Input>
+        <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="number" v-model.number="form.标价"></Input>
         </FormItem>
-        <FormItem label="标价" prop="标价" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="number" v-model="form.标价"></Input>
+        <FormItem label="备注" prop="备注" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="textarea" v-model="form.设计理念"></Input>
         </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">添加</Button>
@@ -40,11 +38,10 @@
                     名称: '',
                     重量: '',
                     进货价: '',
-                    进货日期: new Date(),
                     标价: '',
-                    规格: '',
-                    searchData: []
+                    备注:'',
                 },
+                searchData: []
             };
         },
         computed: {

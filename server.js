@@ -37,7 +37,8 @@ let mk = {
     pd: '盘点',
     rz: '日志',
     yl: '原料',
-    ck: '出库'
+    ck: '出库',
+    user: '用户'
 };
 app.route('/:model')
     .get(function (req, res) {
@@ -128,34 +129,23 @@ app.route('/:model')
                 });
             }
         }
-        /*
-        todo 配件和原料的入库累加在遇到价格不同时的处理
+        //todo 配件和原料的入库累加在遇到价格不同时的处理
         else if (model === 'pj' || model === 'yl') {
             delete req.body.path;
-            db.collection(model).updateOne(req.body, function (err, result) {
+            db.collection(model).updateOne({
+                _id: req.body.名称
+            }, {
+                $inc: {
+                    重量: req.body.重量
+                }
+            }, function (err, result) {
                 if (err) {
                     res.json(err);
                     console.log(err);
                 } else {
-                    res.json(result);
-                    if (model === 'pd') {
-                        db.collection('rz').insertOne(
-                            {
-                                类型: '盘点',
-                                模块: mk[model],
-                                时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                员工: req.body.user,
-                            },
-                            (err, result) => {
-                                if (err) {
-                                    throw err;
-                                    console.log(err);
-                                } else {
-
-                                }
-                            }
-                        );
-                    } else if (model != 'rz') {
+                    console.log(result.result);
+                    if (result.result.nModified === 1) {
+                        res.json(result);
                         db.collection('rz').insertOne(
                             {
                                 类型: '入库',
@@ -173,11 +163,36 @@ app.route('/:model')
                                 }
                             }
                         );
+                    } else {
+                        db.collection(model).insertOne(req.body, function (err, result) {
+                            if (err) {
+                                res.json(err);
+                                console.log(err);
+                            } else {
+                                res.json(result);
+                                db.collection('rz').insertOne(
+                                    {
+                                        类型: '入库',
+                                        模块: mk[model],
+                                        时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                        员工: req.body.user,
+                                        物品: req.body._id,
+                                    },
+                                    (err, result) => {
+                                        if (err) {
+                                            throw err;
+                                            console.log(err);
+                                        } else {
+
+                                        }
+                                    }
+                                );
+                            }
+                        });
                     }
                 }
             });
         }
-        */
         else if (model === 'login') {
             db.collection('user').findOne(req.body, (err, result) => {
                 if (err) {
@@ -198,8 +213,65 @@ app.route('/:model')
                     res.json(result);
                 }
             });
-        } else {
+        }
+        else if (model === 'user') {
             delete req.body.path;
+            db.collection(model).insertOne(req.body, function (err, result) {
+                if (err) {
+                    res.json(err);
+                    console.log(err);
+                } else {
+                    res.json(result);
+                    db.collection('rz').insertOne(
+                        {
+                            类型: '添加用户',
+                            模块: mk[model],
+                            时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                            员工: req.body.user,
+                            物品: req.body._id,
+                        },
+                        (err, result) => {
+                            if (err) {
+                                throw err;
+                                console.log(err);
+                            } else {
+
+                            }
+                        }
+                    );
+                }
+            });
+        }
+        else if (model === 'delete') {
+            db.collection('user').deleteOne(req.body, function (err, result) {
+                if (err) {
+                    res.json(err);
+                    console.log(err);
+                } else {
+                    res.json(result);
+                    db.collection('rz').insertOne(
+                        {
+                            类型: '删除员工',
+                            模块: mk[model],
+                            时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                            员工: req.body.user,
+                            物品: req.body._id,
+                        },
+                        (err, result) => {
+                            if (err) {
+                                throw err;
+                                console.log(err);
+                            } else {
+
+                            }
+                        }
+                    );
+                }
+            });
+        }
+        else {
+            delete req.body.path;
+            req.body._id = req.body.条码号;
             db.collection(model).insertOne(req.body, function (err, result) {
                 if (err) {
                     res.json(err);
@@ -245,10 +317,8 @@ app.route('/:model')
                 }
             });
         }
-    })
-    .put(function (req, res) {
-
     });
+
 var app2 = express();
 http.Server(app2).listen(80);
 app2.get('/*', function (req, res) {
