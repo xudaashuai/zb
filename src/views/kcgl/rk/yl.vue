@@ -1,6 +1,5 @@
 <template>
     <Form :model="form" ref="form" :label-width="80">
-
         <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
             <AutoComplete
                     v-model="form.名称"
@@ -18,8 +17,13 @@
         <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model.number="form.标价"></Input>
         </FormItem>
-        <FormItem label="备注" prop="备注" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="textarea" v-model="form.设计理念"></Input>
+        <FormItem label="备注" prop="备注">
+            <Input type="textarea" v-model="form.备注"></Input>
+        </FormItem>
+        <FormItem label="图片">
+            <image-upload v-model="uploadList">
+
+            </image-upload>
         </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">添加</Button>
@@ -43,6 +47,7 @@
                     备注: ''
                 },
                 searchData: [],
+                uploadList:[]
             };
         },
         computed: {
@@ -55,8 +60,7 @@
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.$Message.info('正在添加');
-                        this.form._id = this.form.名称;
+                        this.$Message.info('正在添加');this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
                         this.$store.dispatch('add', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
@@ -72,7 +76,7 @@
                 this.$refs[name].resetFields();
             },
             handleSearch (value) {
-                return this.searchData = this.$store.state.zb.yl.filter((item) => item.名称.indexOf(value) > -1);
+                return this.searchData = this.$store.state.zb.ylAll.filter((item) => item.名称.indexOf(value) > -1);
             }
         }
     };

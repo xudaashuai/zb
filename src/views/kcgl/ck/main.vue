@@ -73,6 +73,7 @@
                 ckType: [
                     '出售',
                     '制作领用',
+                    '外出展览',
                     '其他',
                 ],
                 wpType: [
@@ -88,7 +89,7 @@
             }),
             ...mapState({
                 data: (state) => state.zb.sp.concat(state.zb.xql).concat(state.zb.sjk).filter((item) => item.状态 === '在库'),
-                otherData: (state) => state.zb.pj.concat(state.zb.yl).filter((item) => item.状态 === '在库'),
+                otherData: (state) => state.zb.pjAll.concat(state.zb.ylAll).filter((item) => item.状态 === '在库'),
             }),
             selectItem () {
                 let t = _.findWhere(this.otherData, {名称: this.form.物品});

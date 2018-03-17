@@ -20,7 +20,6 @@ app.all('*', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-
     if (req.method === 'OPTIONS') {
         res.send(200);
     }
@@ -39,6 +38,20 @@ let mk = {
     yl: '原料',
     ck: '出库',
     user: '用户'
+};
+
+function logging (rz) {
+    db.collection('rz').insertOne(
+        rz,
+        (err, result) => {
+            if (err) {
+                throw err;
+                console.log(err);
+            } else {
+
+            }
+        }
+    );
 };
 app.route('/:model')
     .get(function (req, res) {
@@ -70,6 +83,22 @@ app.route('/:model')
                             });
                         } else {
                             res.json(result);
+                            if(req.body.出库原因==='出售'){
+                                db.collection('cs').insertOne(
+                                    {
+                                        时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                        商品:req.body.物品,
+                                    },
+                                    (err, result) => {
+                                        if (err) {
+                                            throw err;
+                                            console.log(err);
+                                        } else {
+
+                                        }
+                                    }
+                                );
+                            }
                             db.collection('rz').insertOne(
                                 {
                                     类型: '出库-' + req.body.出库原因,
@@ -132,43 +161,24 @@ app.route('/:model')
         //todo 配件和原料的入库累加在遇到价格不同时的处理
         else if (model === 'pj' || model === 'yl') {
             delete req.body.path;
-            db.collection(model).updateOne({
-                _id: req.body.名称
-            }, {
-                $inc: {
-                    重量: req.body.重量
-                }
-            }, function (err, result) {
+            db.collection(model).insertOne(req.body, (err, result) => {
                 if (err) {
                     res.json(err);
                     console.log(err);
                 } else {
-                    console.log(result.result);
-                    if (result.result.nModified === 1) {
-                        res.json(result);
-                        db.collection('rz').insertOne(
-                            {
-                                类型: '入库',
-                                模块: mk[model],
-                                时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                员工: req.body.user,
-                                物品: req.body._id,
-                            },
-                            (err, result) => {
-                                if (err) {
-                                    throw err;
-                                    console.log(err);
-                                } else {
-
-                                }
-                            }
-                        );
-                    } else {
-                        db.collection(model).insertOne(req.body, function (err, result) {
-                            if (err) {
-                                res.json(err);
-                                console.log(err);
-                            } else {
+                    db.collection(model).updateOne({
+                        _id: req.body.名称
+                    }, {
+                        $inc: {
+                            重量: req.body.重量
+                        }
+                    }, function (err, result) {
+                        if (err) {
+                            res.json(err);
+                            console.log(err);
+                        } else {
+                            console.log(result.result);
+                            if (result.result.nModified === 1) {
                                 res.json(result);
                                 db.collection('rz').insertOne(
                                     {
@@ -187,9 +197,34 @@ app.route('/:model')
                                         }
                                     }
                                 );
+                            } else {
+                                db.collection(model).insertOne({
+                                    ...req.body, _id: req.body.名称
+                                }, function (err, result) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        db.collection('rz').insertOne(req.body, function (err, result) {
+                                            if (err) {
+                                                res.json(err);
+                                                console.log(err);
+                                            } else {
+                                                res.json(result);
+                                                let rz = {
+                                                    类型: '入库',
+                                                    模块: mk[model],
+                                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                                    员工: req.body.user,
+                                                    物品: req.body._id,
+                                                };
+                                                logging(rz);
+                                            }
+                                        });
+                                    }
+                                });
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             });
         }

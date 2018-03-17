@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-axios.defaults.baseURL = 'http://120.25.75.23:8081/';
+axios.defaults.baseURL = 'http://localhost:8081/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const zb = {
@@ -18,6 +18,8 @@ const zb = {
         rz: [],
         pd: [],
         user: [],
+        ylAll:[],
+        pjAll:[]
     },
     mutations: {
         set (state, data) {
@@ -172,6 +174,18 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
+                    'key': '图片',
+                    'title': '图片',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '图片',
+                    'overflowTitle': true,
+                    componentName: 'image-view'
+                },
+                {
                     'key': '备注',
                     'title': '备注',
                     'sortable': true,
@@ -255,7 +269,7 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '配石',
-                    componentName:'items-view2'
+                    componentName: 'items-view2'
                 },
                 {
                     'key': '标价',
@@ -546,6 +560,18 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
+                    'key': '图片',
+                    'title': '图片',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '图片',
+                    'overflowTitle': true,
+                    componentName: 'image-view'
+                },
+                {
                     'key': '备注',
                     'title': '备注',
                     'sortable': true,
@@ -703,7 +729,7 @@ const zb = {
                     'titleAlign': 'center',
                     'columnAlign': 'center',
                     'isResize': true
-                }
+                },
             ];
         },
         ezColumns () {
@@ -826,7 +852,19 @@ const zb = {
                     if (res.data.errmsg) {
                         reject('错误代码' + res.data.code);
                     } else {
-                        context.commit('set', {path: data.path, data: res.data});
+                        if (data.path === 'yl' || data.path === 'pj') {
+                            context.commit('set', {
+                                path: data.path, data: res.data.filter((item) => {
+                                    return item._id !== item.名称;
+                                })
+                            });context.commit('set', {
+                                path: data.path+'All', data: res.data.filter((item) => {
+                                    return item._id === item.名称;
+                                })
+                            });
+                        } else {
+                            context.commit('set', {path: data.path, data: res.data});
+                        }
                         resolve();
                     }
                 }).catch(err => reject(err));

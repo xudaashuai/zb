@@ -9,14 +9,19 @@
         <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model.number="form.标价"></Input>
         </FormItem>
-        <FormItem label="备注" prop="备注" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="textarea" v-model="form.设计理念"></Input>
+
+        <FormItem  label="图片">
+            <image-upload v-model="uploadList">
+
+            </image-upload>
+        </FormItem>
+        <FormItem label="备注" prop="备注">
+            <Input type="textarea" v-model="form.备注"></Input>
         </FormItem>
         <Row>
             <Col span="12">
             <FormItem label="主石" prop="主石.名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-
-                <Input type="text" v-model="form.主石.名称" placeholder="输入主石信息"></Input>
+                <Input type="text" v-model="form.主石.名称"></Input>
             </FormItem>
             </Col>
 
@@ -77,7 +82,8 @@
                     标价: '',
                     主石: {},
                     备注:''
-                }
+                },
+                uploadList: []
             };
         },
         methods: {
@@ -85,7 +91,8 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.info('正在添加');
-                        this.form._id = this.form.条码号;
+                        this.form._id = this.form.条码号;                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
+                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
                         this.$store.dispatch('add', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');

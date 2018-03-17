@@ -6,7 +6,7 @@
                 <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
             </div>
         </div>
-        <Modal title="View Image" v-model="visible">
+        <Modal title="图片浏览" v-model="visible">
             <img :src="image" v-if="visible" style="width: 100%">
         </Modal>
     </div>

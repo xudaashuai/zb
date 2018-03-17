@@ -18,43 +18,13 @@
         <FormItem label="设计理念" prop="设计理念" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="textarea" v-model="form.设计理念"></Input>
         </FormItem>
-        <FormItem label="备注" prop="备注" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-            <Input type="textarea" v-model="form.设计理念"></Input>
+        <FormItem label="备注" prop="备注">
+            <Input type="textarea" v-model="form.备注"></Input>
         </FormItem>
-        <FormItem>
-            <div class="demo-upload-list" v-for="item in uploadList">
-                <template v-if="item.status === 'finished'">
-                    <img :src="item.url">
-                    <div class="demo-upload-list-cover">
-                        <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                        <Icon type="ios-trash-outline" @click.native="handleFileRemove(item)"></Icon>
-                    </div>
-                </template>
-                <template v-else>
-                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                </template>
-            </div>
-            <Upload
-                    ref="upload"
-                    :show-upload-list="false"
-                    :default-file-list="defaultList"
-                    :on-success="handleSuccess"
-                    :format="['jpg','jpeg','png']"
-                    :max-size="2048"
-                    :on-format-error="handleFormatError"
-                    :on-exceeded-size="handleMaxSize"
-                    :before-upload="handleBeforeUpload"
-                    multiple
-                    type="drag"
-                    action="http://58.33.49.46:672/v1/upload"
-                    style="display: inline-block;width:58px;">
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                    <Icon type="camera" size="20"></Icon>
-                </div>
-            </Upload>
-            <Modal title="View Image" v-model="visible">
-                <img :src="'http://ww2.sinaimg.cn/large/' + imgName" v-if="visible" style="width: 100%">
-            </Modal>
+        <FormItem label="图片">
+            <image-upload v-model="uploadList">
+
+            </image-upload>
         </FormItem>
         <FormItem
                 v-for="(item, index) in form.组成"
@@ -148,46 +118,10 @@
             handleRemove (index) {
                 this.form.组成.splice(index, 1);
             },
-            handleView (name) {
-                this.imgName = name;
-                this.visible = true;
-            },
-            handleFileRemove (file) {
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-            },
-            handleSuccess (res, file) {
-                console.log(res);
-                file.url = 'http://ww2.sinaimg.cn/large/' + res.wbpid;
-                file.name = res.wbpid;
-            },
-            handleFormatError (file) {
-                this.$Notice.warning({
-                    title: '文件格式不对哦',
-                    desc: file.name + '的格式不对，请选择 jpg/png.'
-                });
-            },
-            handleMaxSize (file) {
-                this.$Notice.warning({
-                    title: '文件大小限制',
-                    desc: file.name + '太大了，不能超过2M哦.'
-                });
-            },
-            handleBeforeUpload () {
-                const check = this.uploadList.length < 5;
-                if (!check) {
-                    this.$Notice.warning({
-                        title: 'Up to five pictures can be uploaded.'
-                    });
-                }
-                return check;
-            }
         },
-        mounted () {
-            this.uploadList = this.$refs.upload.fileList;
-        }
     };
 </script>
+
 <style>
     .demo-upload-list {
         display: inline-block;
