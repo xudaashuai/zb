@@ -8,7 +8,7 @@
                 <Input placeholder="条码号" type="text" v-model="form.条码号"></Input>
             </FormItem>
             <FormItem prop="证书号">
-                <Input placeholder="条码号" type="text" v-model="form.证书号"></Input>
+                <Input placeholder="证书号" type="text" v-model="form.证书号"></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="resetSearch">重置</Button>

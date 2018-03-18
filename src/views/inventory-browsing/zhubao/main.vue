@@ -14,7 +14,7 @@
             <Input placeholder="条码号" type="text" v-model="form.条码号"></Input>
         </FormItem>
         <FormItem prop="证书号">
-            <Input placeholder="条码号" type="text" v-model="form.证书号"></Input>
+            <Input placeholder="证书号" type="text" v-model="form.证书号"></Input>
         </FormItem><FormItem prop="状态">
         <Select  v-model="form.状态" style="width: 100px">
             <Option v-for="item in ['','在库','出售','制作领用','外出展览','其他']" :key="item" :value="item">{{item===''?'全部':item}}</Option>
