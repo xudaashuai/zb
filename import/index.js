@@ -721,9 +721,15 @@ MongoClient.connect(url, function (err, d) {
     console.log('数据库已创建!');
     db = d.db('data');
     for (item of t) {
+        if(item.扫描码){
         item.条码号= item.扫描码
         item._id= item.扫描码
-        delete item.扫描码
+        delete item.扫描码}
+        else {
+
+            item.条码号= item.货号
+            item._id= item.货号
+        }
         db.collection('sjk').insertOne(item);
     }
 });

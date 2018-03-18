@@ -101,10 +101,10 @@
         mounted () {
         },
         created () {
-            this.$store.dispatch('get', {path: 'sp'}).then(
+            /*this.$store.dispatch('get', {path: 'sp'}).then(
                 () => this.$Message.success('加载数据成功'),
                 () => this.$Message.error('加载数据失败')
-            );
+            );*/
         },
         methods: {
             resetSearch () {

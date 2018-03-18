@@ -7,9 +7,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const zb = {
     state: {
         mType: [
-            '和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡'
+            '和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡','玛瑙'
         ],
-        uType: ['挂件', '手镯', '把件', '摆件', '珠链'],
+        uType: ['挂件', '手镯', '把件', '摆件', '珠链','其他'],
         sp: [],
         xql: [],
         yl: [],
@@ -257,6 +257,7 @@ const zb = {
                     'field': '主石',
                     'overflowTitle': true,
                     formatter: function (rowData, rowIndex, pagingIndex, field) {
+                        return '';
                         return rowData[field].名称 + rowData[field].重量 + 'g';
                     }
                 },

@@ -45,6 +45,7 @@
             }),
             data () {
                 return this.$store.state.zb.sjk.filter((item) => {
+                    if ('名称' in item && '条码号' in item)
                     return item.名称.indexOf(this.form.名称) > -1 && item.条码号.indexOf(this.form.条码号) > -1;
                 });
             }
