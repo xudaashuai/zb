@@ -7,9 +7,6 @@
             <FormItem prop="条码号">
                 <Input placeholder="条码号" type="text" v-model="form.条码号"></Input>
             </FormItem>
-            <FormItem prop="证书号">
-                <Input placeholder="证书号" type="text" v-model="form.证书号"></Input>
-            </FormItem>
             <FormItem>
                 <Button type="primary" @click="resetSearch">重置</Button>
             </FormItem>
@@ -37,7 +34,6 @@
                 form: {
                     名称: '',
                     条码号: '',
-                    证书号: '',
                 }
             };
         },
@@ -49,7 +45,7 @@
             }),
             data () {
                 return this.$store.state.zb.sjk.filter((item) => {
-                    return item.名称.indexOf(this.form.名称) > -1 && item.条码号.indexOf(this.form.条码号) > -1 && item.证书号.indexOf(this.form.证书号) > -1;
+                    return item.名称.indexOf(this.form.名称) > -1 && item.条码号.indexOf(this.form.条码号) > -1;
                 });
             }
         },
@@ -65,7 +61,6 @@
                 this.form = {
                     名称: '',
                     条码号: '',
-                    证书号: '',
                 };
             }
         }

@@ -424,17 +424,6 @@ const zb = {
                     'overflowTitle': true,
                     componentName: 'items-view'
                 },
-                {
-                    'key': '证书号',
-                    'title': '证书号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '证书号',
-                    'overflowTitle': true
-                },
                 rootState.app.adminMode ? {
                     'key': '进货价',
                     'title': '进货价',
