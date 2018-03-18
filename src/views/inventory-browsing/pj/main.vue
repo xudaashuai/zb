@@ -37,7 +37,7 @@
                 show: state => state.app.show
             }),data () {
                 return this.$store.state.zb.pj.filter((item) => {
-                    return item.名称.indexOf(this.form.名称) > -1;
+                    return item.名称.indexOf(this.form.名称) > -1 || item.名称 === item._id;
                 });
             }
         },

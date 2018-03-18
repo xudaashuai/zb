@@ -283,6 +283,17 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
+                    'key': '状态',
+                    'title': '状态',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '状态',
+                    'overflowTitle': true
+                },
+                {
                     'key': '备注',
                     'title': '备注',
                     'sortable': true,

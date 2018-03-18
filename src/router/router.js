@@ -157,6 +157,12 @@ export const appRouter = [
                 component: () => import('@/views/kcgl/ck/main.vue')
             },
             {
+                path: 'gh',
+                title: '归还',
+                name: 'Inventory Manage4',
+                component: () => import('@/views/kcgl/rk/gh.vue')
+            },
+            {
                 path: 'kcpd',
                 title: '库存盘点',
                 name: 'Inventory Manage3',
