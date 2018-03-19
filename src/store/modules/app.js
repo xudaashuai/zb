@@ -5,7 +5,9 @@ import Vue from 'vue';
 
 const app = {
     state: {
-        cachePage: [],
+        cachePage: [
+            ''
+        ],
         lang: '',
         isFullScreen: false,
         adminMode: false,

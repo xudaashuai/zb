@@ -53,6 +53,17 @@ const zb = {
                     'overflowTitle': true
                 },
                 {
+                    'key': '货号',
+                    'title': '货号',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '货号',
+                    'overflowTitle': true
+                },
+                {
                     'key': '条码号',
                     'title': '条码号',
                     'sortable': true,
@@ -105,6 +116,17 @@ const zb = {
                     'columnAlign': 'center',
                     'isResize': true,
                     'field': '进货日期',
+                    'overflowTitle': true
+                },
+                {
+                    'key': '出售日期',
+                    'title': '出售日期',
+                    'sortable': true,
+                    'width': 120,
+                    'titleAlign': 'center',
+                    'columnAlign': 'center',
+                    'isResize': true,
+                    'field': '出售日期',
                     'overflowTitle': true
                 },
                 rootState.app.adminMode ? {
