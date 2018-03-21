@@ -24,6 +24,7 @@
     import {mapGetters, mapState} from 'vuex';
 
     export default {
+        name:'ib-pj',
         data: function () {
             return {
                 form:{

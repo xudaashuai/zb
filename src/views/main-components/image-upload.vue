@@ -24,7 +24,7 @@
                 :before-upload="handleBeforeUpload"
                 multiple
                 type="drag"
-                action="http://61.171.108.251:672/v1/upload"
+                :action="apiUrl+'v1/upload'"
                 style="display: inline-block;width:58px;">
             <div style="width: 58px;height:58px;line-height: 58px;">
                 <Icon type="camera" size="20"></Icon>
@@ -40,8 +40,8 @@
     import {mapState} from 'vuex';
 
     export default {
-        name:'image-upload',
-        props:['value'],
+        name: 'image-upload',
+        props: ['value'],
         data () {
             return {
                 defaultList: [],
@@ -49,6 +49,11 @@
                 visible: false,
                 uploadList: []
             };
+        },
+        computed: {
+            apiUrl () {
+                return this.$store.state.zb.apiUrl;
+            }
         },
         methods: {
             handleView (name) {
@@ -59,11 +64,11 @@
                 const fileList = this.$refs.upload.fileList;
                 this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
             },
-            handleSuccess (res, file,fileList) {
+            handleSuccess (res, file, fileList) {
                 console.log(res);
-                this.$emit('input', fileList)
+                this.$emit('input', fileList);
                 file.url = 'http://ww2.sinaimg.cn/large/' + res.wbpid;
-                console.log(fileList)
+                console.log(fileList);
             },
             handleFormatError (file) {
                 this.$Notice.warning({
@@ -86,6 +91,9 @@
                 }
                 return check;
             }
+        },
+        created () {
+            this.$store.dispatch('getUploadUrl');
         },
         mounted () {
             this.uploadList = this.$refs.upload.fileList;

@@ -22,7 +22,7 @@
 
             <FormItem v-if="form.物品类别==='商品'" label="物品" prop="物品"
                       :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
-                <Select v-model="form.物品" filterable>
+                <Select v-model="form.物品" filterable multiple>
                     <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
                         <span style="float:right;color:#ccc">{{item.条码号}}</span>
                     </Option>
@@ -109,6 +109,8 @@
                             } else {
                                 this.$Message.info('正在出库');
                                 this.form._id = this.form.货号;
+                                if (this.form.物品类别 === '配件或原料')
+                                this.form.type=_.findWhere(this.data)
                                 this.$store.dispatch('ck', this.form).then((res) => {
                                     console.log(res);
                                     this.$Message.success('出库成功!');

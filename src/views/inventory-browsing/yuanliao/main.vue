@@ -24,6 +24,7 @@
     import {mapGetters, mapState} from 'vuex';
 
     export default {
+        name:'ib-yl',
         data: function () {
             return {
                 form:{

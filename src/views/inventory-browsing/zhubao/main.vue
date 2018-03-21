@@ -1,27 +1,30 @@
 <template>
     <div>
-        <Form ref="form" :model="form" inline>
+        <Form ref="formInput" :model="formInput" inline>
             <FormItem prop="类别">
-                <Select v-model="form.类别" placeholder="类别">
+                <Select v-model="formInput.类别" placeholder="类别">
                     <Option value="">全部</Option>
                     <Option v-for="item in uType" :key="item" :value="item">{{item}}</Option>
                 </Select>
             </FormItem>
             <FormItem prop="名称">
-                <Input placeholder="名称" type="text" v-model="form.名称"></Input>
+                <Input placeholder="名称" type="text" v-model.upper="formInput.名称"></Input>
             </FormItem>
             <FormItem prop="条码号">
-                <Input placeholder="条码号" type="text" v-model="form.条码号"></Input>
+                <Input placeholder="条码号" type="text" v-model="formInput.条码号"></Input>
             </FormItem>
             <FormItem prop="证书号">
-                <Input placeholder="证书号" type="text" v-model="form.证书号"></Input>
+                <Input placeholder="证书号" type="text" v-model="formInput.证书号"></Input>
             </FormItem>
             <FormItem prop="状态">
-                <Select v-model="form.状态" style="width: 100px">
+                <Select v-model="formInput.状态" style="width: 100px">
                     <Option v-for="item in ['','在库','出售','制作领用','外出展览','其他']" :key="item" :value="item">
                         {{item===''?'全部':item}}
                     </Option>
                 </Select>
+            </FormItem>
+            <FormItem>
+                <Button type="primary" @click="search">查找</Button>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="resetSearch">重置</Button>
@@ -39,7 +42,6 @@
                              column-width-drag
                              row-hover-color="#eee"
                              row-click-color="#edf7ff"
-                             odd-bg-color="#fafafa"
                              :columns="spColumns"
                              :table-data="allData"></v-table>
                 </TabPane>
@@ -66,7 +68,13 @@
         name:'ib-sp',
         data: function () {
             return {
-                form: {
+                formInput: {
+                    名称: '',
+                    类别: '',
+                    条码号: '',
+                    证书号: '',
+                    状态: ''
+                },form: {
                     名称: '',
                     类别: '',
                     条码号: '',
@@ -113,7 +121,7 @@
         },
         methods: {
             resetSearch () {
-                this.form = {
+                this.formInput = this.form = {
                     名称: '',
                     类别: '',
                     条码号: '',
@@ -121,17 +129,22 @@
                     状态: ''
                 };
             }, columnCellClass (rowIndex, columnName, rowData) {
-                console.log(rowData)
                 if (rowData.货号)
                 if (rowData.货号[0] === 'w'||rowData.货号[0] === 'W') {
                     return 'w-class';
                 }
 
+            },
+            search(){
+                let that = this
+                 Object.keys(this.formInput).map(function(key, index) {
+                     that.$set(that.form,key , that.formInput[key].toUpperCase());
+                });
             }
         }
     };
 </script>
-<style scoped>
+<style>
     .card {
         height: 100%;
         margin-top: -15px;

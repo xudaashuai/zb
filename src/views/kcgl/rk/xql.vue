@@ -18,52 +18,54 @@
         <FormItem label="备注" prop="备注">
             <Input type="textarea" v-model="form.备注"></Input>
         </FormItem>
-        <Row>
-            <Col span="12">
-            <FormItem label="主石" prop="主石.名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="text" v-model="form.主石.名称"></Input>
-            </FormItem>
-            </Col>
-
-            <Col span="8">
-            <FormItem label="重量" prop="主石.重量"
-                      :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="text" v-model.number="form.主石.重量" placeholder="重量"></Input>
-            </FormItem>
-            </Col>
-        </Row>
-        <Row
-                v-for="(item, index) in form.配石" :key="index">
-            <Col span="12">
-            <FormItem
-                    :key="index"
-                    :label="'配石 ' + (index+1)"
-                    :prop="'配石.' + index +'.名称'"
-                    :rules="{required: true, message: '配石 ' + (index+1) +'不能为空', trigger: 'blur'}">
-
-                <Input type="text" v-model="item.名称" placeholder="输入配石信息"></Input>
-
-            </FormItem>
-            </Col>
-
-            <Col span="8">
-            <FormItem label="重量" :prop="'配石.' + index +'.重量'"
-                      :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
-                <Input type="text" v-model.number="item.重量" placeholder="重量"></Input>
-            </FormItem>
-            </Col>
-
-            <Col span="3" offset="1">
-            <Button type="ghost" @click="handleRemove(index)">删除</Button>
-            </Col>
-        </Row>
-        <FormItem>
+        <!--
             <Row>
                 <Col span="12">
-                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加配石</Button>
+                <FormItem label="主石" prop="主石.名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+                    <Input type="text" v-model="form.主石.名称"></Input>
+                </FormItem>
+                </Col>
+
+                <Col span="8">
+                <FormItem label="重量" prop="主石.重量"
+                          :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+                    <Input type="text" v-model.number="form.主石.重量" placeholder="重量"></Input>
+                </FormItem>
                 </Col>
             </Row>
-        </FormItem>
+            <Row
+                    v-for="(item, index) in form.配石" :key="index">
+                <Col span="12">
+                <FormItem
+                        :key="index"
+                        :label="'配石 ' + (index+1)"
+                        :prop="'配石.' + index +'.名称'"
+                        :rules="{required: true, message: '配石 ' + (index+1) +'不能为空', trigger: 'blur'}">
+
+                    <Input type="text" v-model="item.名称" placeholder="输入配石信息"></Input>
+
+                </FormItem>
+                </Col>
+
+                <Col span="8">
+                <FormItem label="重量" :prop="'配石.' + index +'.重量'"
+                          :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+                    <Input type="text" v-model.number="item.重量" placeholder="重量"></Input>
+                </FormItem>
+                </Col>
+
+                <Col span="3" offset="1">
+                <Button type="ghost" @click="handleRemove(index)">删除</Button>
+                </Col>
+            </Row>
+            <FormItem>
+                <Row>
+                    <Col span="12">
+                    <Button type="dashed" long @click="handleAdd" icon="plus-round">添加配石</Button>
+                    </Col>
+                </Row>
+            </FormItem>
+        -->
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">入库</Button>
             <Button type="ghost" @click="handleReset('form')" style="margin-left: 8px">重置</Button>

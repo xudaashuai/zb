@@ -19,11 +19,15 @@ const zb = {
         pd: [],
         user: [],
         ylAll:[],
-        pjAll:[]
+        pjAll:[],
+        apiUrl:'',
     },
     mutations: {
         set (state, data) {
             state[data.path] = data.data;
+        },
+        setUrl(state,data){
+            state.apiUrl=data
         }
     },
     getters: {
@@ -268,32 +272,6 @@ const zb = {
                     'field': '进货价',
                     'overflowTitle': true
                 } : undefined,
-                {
-                    'key': '主石',
-                    'title': '主石',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '主石',
-                    'overflowTitle': true,
-                    formatter: function (rowData, rowIndex, pagingIndex, field) {
-                        return '';
-                        return rowData[field].名称 + rowData[field].重量 + 'g';
-                    }
-                },
-                {
-                    'key': '配石',
-                    'title': '配石',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '配石',
-                    componentName: 'items-view2'
-                },
                 {
                     'key': '标价',
                     'title': '标价',
@@ -892,6 +870,12 @@ const zb = {
                     }
                 }).catch(err => reject(err));
             });
+        },
+        getUploadUrl(context,data){
+            axios.get('http://danmu.fm/api/hosts').then(res => {
+                let ip =  res.data.cmcc.match(/[\d\.]+/);
+                context.commit('setUrl','http://'+ip+':'+672+'/')
+            }).catch(err => console.log(err));
         }
     }
 };

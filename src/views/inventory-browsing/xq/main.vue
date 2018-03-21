@@ -37,6 +37,7 @@
     import {mapGetters, mapState} from 'vuex';
 
     export default {
+        name:'ib-xql',
         data: function () {
             return {    form: {
                     名称: '',

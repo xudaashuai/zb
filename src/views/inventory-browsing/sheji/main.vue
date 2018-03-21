@@ -29,6 +29,7 @@
     import {mapGetters, mapState} from 'vuex';
 
     export default {
+        name:'ib-sjk',
         data: function () {
             return {
                 form: {
