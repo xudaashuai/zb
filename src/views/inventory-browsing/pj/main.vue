@@ -11,7 +11,7 @@
                  is-vertical-resize
                  style="width:100%"
                  is-horizontal-resize
-                 :vertical-resize-offset='40'
+                 :vertical-resize-offset='20'
                  column-width-drag
                  row-hover-color="#eee"
                  row-click-color="#edf7ff"

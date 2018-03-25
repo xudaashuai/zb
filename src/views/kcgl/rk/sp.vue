@@ -11,8 +11,11 @@
             </Select>
         </FormItem>
         <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
-        <Input type="text" v-model="form.名称"></Input>
-    </FormItem>
+            <Input type="text" v-model="form.名称"></Input>
+        </FormItem>
+        <FormItem label="货号" prop="货号" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="text" v-model="form.货号"></Input>
+        </FormItem>
         <FormItem label="条码号" prop="条码号" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="text" v-model="form.条码号"></Input>
         </FormItem>
@@ -44,13 +47,13 @@
                   :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model.number="form.克价"></Input>
         </FormItem>
+        <FormItem label="备注" prop="备注">
+            <Input type="textarea" v-model="form.备注"></Input>
+        </FormItem>
         <FormItem label="图片">
             <image-upload v-model="uploadList">
 
             </image-upload>
-        </FormItem>
-        <FormItem label="备注" prop="备注">
-            <Input type="textarea" v-model="form.备注"></Input>
         </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">添加</Button>
@@ -66,9 +69,10 @@
             return {
                 type: -1,
                 form: {
-                    path: 'sp',
+                    type: 'sp',
                     证书号: '',
                     条码号: '',
+                    货号:'',
                     名称: '',
                     材质: '',
                     类别: '',
@@ -95,10 +99,9 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.info('正在添加');
-                        this.form._id = this.form.条码号;                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
+                        this.form._id = this.form.条码号;
                         this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
-
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('addItem', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
                         }, (err) => {

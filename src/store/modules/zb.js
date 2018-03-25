@@ -7,9 +7,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const zb = {
     state: {
         mType: [
-            '和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡','玛瑙'
+            '和田玉', '南红', '碧玉', '翡翠', '绿松石', '蜜蜡', '玛瑙'
         ],
-        uType: ['挂件', '手镯', '把件', '摆件', '珠链','其他'],
+        uType: ['挂件', '手镯', '把件', '摆件', '珠链', '其他'],
+        item: [],
         sp: [],
         xql: [],
         yl: [],
@@ -18,572 +19,512 @@ const zb = {
         rz: [],
         pd: [],
         user: [],
-        ylAll:[],
-        pjAll:[],
-        apiUrl:'',
+        ylAll: [],
+        pjAll: [],
+        apiUrl: '',
     },
     mutations: {
         set (state, data) {
             state[data.path] = data.data;
         },
-        setUrl(state,data){
-            state.apiUrl=data
+        setUrl (state, data) {
+            state.apiUrl = data;
         }
     },
     getters: {
-        spColumns (state, getters, rootState) {
-            return [
-                {
-                    'key': '名称',
-                    'title': '名称',
-                    'sortable': true,
-                    isFrozen: true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '名称',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '证书号',
-                    'title': '证书号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '证书号',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '货号',
-                    'title': '货号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '货号',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '条码号',
-                    'title': '条码号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '条码号',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '材质',
-                    'title': '材质',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '材质',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '类别',
-                    'title': '类别',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '类别',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '重量',
-                    'title': '重量',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '重量',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '进货日期',
-                    'title': '进货日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货日期',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '出售日期',
-                    'title': '出售日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '出售日期',
-                    'overflowTitle': true
-                },
-                rootState.app.adminMode ? {
-                    'key': '进货价',
-                    'title': '进货价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货价',
-                    'overflowTitle': true
-                } : undefined,
-                {
-                    'key': '标价',
-                    'title': '标价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '标价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '规格',
-                    'title': '规格',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '规格',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '数量',
-                    'title': '数量',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '数量',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '克价',
-                    'title': '克价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '克价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '状态',
-                    'title': '状态',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '状态',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '图片',
-                    'title': '图片',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '图片',
-                    'overflowTitle': true,
-                    componentName: 'image-view'
-                },
-                {
-                    'key': '备注',
-                    'title': '备注',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '备注',
-                    'overflowTitle': true
-                },
-            ].filter(item => item);
-        },
-        xqlColumns (state, getters, rootState) {
-            return [
-                {
-                    'key': '名称',
-                    'title': '名称',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '名称',
-                    isFrozen: true,
-                    'overflowTitle': true
-                },
-                {
-                    'key': '条码号',
-                    'title': '条码号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '条码号',
-                    'isFrozen': true,
-                    'overflowTitle': true
-                },
-                {
-                    'key': '进货日期',
-                    'title': '进货日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货日期',
-                    'overflowTitle': true
-                },
-                rootState.app.adminMode ? {
-                    'key': '进货价',
-                    'title': '进货价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货价',
-                    'overflowTitle': true
-                } : undefined,
-                {
-                    'key': '标价',
-                    'title': '标价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '标价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '状态',
-                    'title': '状态',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '状态',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '备注',
-                    'title': '备注',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '备注',
-                    'overflowTitle': true
-                },
-            ].filter(item => item);
-        },
-        pjColumns (state, getters, rootState) {
-            return [
-                {
-                    'key': '名称',
-                    'title': '名称',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '名称',
-                    isFrozen: true,
-                    'overflowTitle': true
-                },
-                {
-                    'key': '重量',
-                    'title': '重量',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '重量',
-                    'overflowTitle': true
-                },
-                rootState.app.adminMode ? {
-                    'key': '进货价',
-                    'title': '进货价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货价',
-                    'overflowTitle': true
-                } : undefined,
-                {
-                    'key': '进货日期',
-                    'title': '进货日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货日期',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '标价',
-                    'title': '标价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '标价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '状态',
-                    'title': '状态',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '状态',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '备注',
-                    'title': '备注',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '备注',
-                    'overflowTitle': true
-                },].filter(item => item);
-        },
-        sjkColumns (state, getters, rootState) {
-            return [
-                {
-                    'key': '名称',
-                    'title': '名称',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    isFrozen: true,
-                    'field': '名称',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '条码号',
-                    'title': '条码号',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '条码号',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '组成',
-                    'title': '组成',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '组成',
-                    'overflowTitle': true,
-                    componentName: 'items-view'
-                },
-                rootState.app.adminMode ? {
-                    'key': '进货价',
-                    'title': '进货价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货价',
-                    'overflowTitle': true
-                } : undefined,
-                {
-                    'key': '进货日期',
-                    'title': '进货日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货日期',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '标价',
-                    'title': '标价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '标价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '状态',
-                    'title': '状态',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '状态',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '图片',
-                    'title': '图片',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '图片',
-                    'overflowTitle': true,
-                    componentName: 'image-view'
-                },
-                {
-                    'key': '备注',
-                    'title': '备注',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '备注',
-                    'overflowTitle': true
-                },].filter(item => item);
-        },
-        ylColumns (state, getters, rootState) {
-            return [
-                {
-                    'key': '名称',
-                    'title': '名称',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '名称',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '重量',
-                    'title': '重量',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '重量',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '进货日期',
-                    'title': '进货日期',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货日期',
-                    'overflowTitle': true
-                },
-                rootState.app.adminMode ? {
-                    'key': '进货价',
-                    'title': '进货价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '进货价',
-                    'overflowTitle': true
-                } : undefined, {
-                    'key': '标价',
-                    'title': '标价',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '标价',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '状态',
-                    'title': '状态',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '状态',
-                    'overflowTitle': true
-                },
-                {
-                    'key': '图片',
-                    'title': '图片',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '图片',
-                    'overflowTitle': true,
-                    componentName: 'image-view'
-                },
-                {
-                    'key': '备注',
-                    'title': '备注',
-                    'sortable': true,
-                    'width': 120,
-                    'titleAlign': 'center',
-                    'columnAlign': 'center',
-                    'isResize': true,
-                    'field': '备注',
-                    'overflowTitle': true
-                },
-            ].filter(item => item);
+        columns (state, getters, rootState) {
+            return {
+                sp: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        isFrozen: true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '名称',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '证书号',
+                        'title': '证书号',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '证书号',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '货号',
+                        'title': '货号',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '货号',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '条码号',
+                        'title': '条码号',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '条码号',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '材质',
+                        'title': '材质',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '材质',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '类别',
+                        'title': '类别',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '类别',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '重量',
+                        'title': '重量',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '重量',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '进货日期',
+                        'title': '进货日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '进货日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '出售日期',
+                        'title': '出售日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '出售日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '标价',
+                        'title': '标价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '标价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '规格',
+                        'title': '规格',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '规格',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '数量',
+                        'title': '数量',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '数量',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '克价',
+                        'title': '克价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '克价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '状态',
+                        'title': '状态',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '状态',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '图片',
+                        'title': '图片',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '图片',
+                        'overflowTitle': true,
+                        componentName: 'image-view'
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },
+                ],
+                xql: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '名称',
+                        isFrozen: true,
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '条码号',
+                        'title': '条码号',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '条码号',
+                        'isFrozen': true,
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '进货日期',
+                        'title': '进货日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '进货日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '标价',
+                        'title': '标价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '标价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '状态',
+                        'title': '状态',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '状态',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },
+                ],
+                sjk: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        isFrozen: true,
+                        'field': '名称',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '条码号',
+                        'title': '条码号',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '条码号',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '组成',
+                        'title': '组成',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '组成',
+                        'overflowTitle': true,
+                        componentName: 'items-view'
+                    },
+                    {
+                        'key': '进货日期',
+                        'title': '进货日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '进货日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '标价',
+                        'title': '标价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '标价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '状态',
+                        'title': '状态',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '状态',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '图片',
+                        'title': '图片',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '图片',
+                        'overflowTitle': true,
+                        componentName: 'image-view'
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },],
+                pj: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '名称',
+                        isFrozen: true,
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '重量',
+                        'title': '重量',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '重量',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '进货日期',
+                        'title': '进货日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '进货日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '标价',
+                        'title': '标价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '标价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '状态',
+                        'title': '状态',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '状态',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },],
+                yl: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '名称',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '重量',
+                        'title': '重量',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '重量',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '进货日期',
+                        'title': '进货日期',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '进货日期',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '标价',
+                        'title': '标价',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '标价',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '状态',
+                        'title': '状态',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '状态',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '图片',
+                        'title': '图片',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '图片',
+                        'overflowTitle': true,
+                        componentName: 'image-view'
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },
+                ],
+            };
         },
         pdColumns (state, getters, rootState) {
             return [
@@ -766,15 +707,67 @@ const zb = {
                 },
             ];
         },
-        allData: (state, getters, rootState) => state.sp.concat(state.xql).concat(state.sjk).filter((item) => item.状态 === '在库'),
-        otherData: (state, getters, rootState) => state.pj.concat(state.yl).filter((item) => item.状态 === '在库'),
+        allData: (state, getters, rootState) => state.item.filter((item) => item.状态 === '在库' && (item.type === 'sp')),
+        otherData: (state, getters, rootState) => state.item.filter((item) => item.名称 === item._id && (item.type === 'pj' || item.type === 'yl') && item.状态 === '在库'),
         typeData: (state, getters, rootState) => (type) => state.sp.filter((item) => item['材质'] === type),
     },
     actions: {
         init (context, data) {
-            for (let model of ['sp', 'xql', 'yl', 'pj', 'sjk']) {
+            for (let model of ['item', 'xql', 'yl', 'pj', 'sjk']) {
                 context.dispatch('get', {path: model});
             }
+        },
+        addItem (context, data) {
+            console.log(data);
+            data.user = Cookies.get('user');
+            data.进货日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+            data.状态 = '在库';
+            return new Promise((resolve, reject) => {
+                axios.post('/item', data).then(res => {
+                    if (res.data.errmsg) {
+                        if (res.data.code === 11000) {
+                            reject('已存在');
+                        } else {
+                            reject('错误代码' + res.data.code);
+                        }
+                    } else {
+                        resolve(res.data);
+                        this.items.push(data);
+                        /*
+                        context.dispatch('get', {
+                            path: data.path
+                        });
+                        */
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+        },
+        addPd (context, data) {
+            console.log(data);
+            data.user = Cookies.get('user');
+            data.进货日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+            return new Promise((resolve, reject) => {
+                axios.post('/pd', data).then(res => {
+                    if (res.data.errmsg) {
+                        if (res.data.code === 11000) {
+                            reject('已存在');
+                        } else {
+                            reject('错误代码' + res.data.code);
+                        }
+                    } else {
+                        resolve(res.data);
+                        context.dispatch('get', {
+                            path: data.path
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
         },
         add (context, data) {
             console.log(data);
@@ -785,6 +778,30 @@ const zb = {
             }
             return new Promise((resolve, reject) => {
                 axios.post('/' + data.path, data).then(res => {
+                    if (res.data.errmsg) {
+                        if (res.data.code === 11000) {
+                            reject('已存在');
+                        } else {
+                            reject('错误代码' + res.data.code);
+                        }
+                    } else {
+                        resolve(res.data);
+                        context.dispatch('get', {
+                            path: data.path
+                        });
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+        },
+        gh (context, data) {
+            console.log(data);
+            data.user = Cookies.get('user');
+            data.进货日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+            return new Promise((resolve, reject) => {
+                axios.post('/gh', data).then(res => {
                     if (res.data.errmsg) {
                         if (res.data.code === 11000) {
                             reject('已存在');
@@ -832,7 +849,7 @@ const zb = {
         ck (context, data) {
             data.user = Cookies.get('username');
             return new Promise((resolve, reject) => {
-                axios.post('/' + data.path, data).then(res => {
+                axios.post('/item', data).then(res => {
                     if (res.data.errmsg) {
                         if (res.data.code === 11000) {
                             reject('该商品已存在');
@@ -858,8 +875,9 @@ const zb = {
                                 path: data.path, data: res.data.filter((item) => {
                                     return item._id !== item.名称;
                                 })
-                            });context.commit('set', {
-                                path: data.path+'All', data: res.data.filter((item) => {
+                            });
+                            context.commit('set', {
+                                path: data.path + 'All', data: res.data.filter((item) => {
                                     return item._id === item.名称;
                                 })
                             });
@@ -871,10 +889,10 @@ const zb = {
                 }).catch(err => reject(err));
             });
         },
-        getUploadUrl(context,data){
+        getUploadUrl (context, data) {
             axios.get('http://danmu.fm/api/hosts').then(res => {
-                let ip =  res.data.cmcc.match(/[\d\.]+/);
-                context.commit('setUrl','http://'+ip+':'+672+'/')
+                let ip = res.data.cmcc.match(/[\d\.]+/);
+                context.commit('setUrl', 'http://' + ip + ':' + 672 + '/');
             }).catch(err => console.log(err));
         }
     }

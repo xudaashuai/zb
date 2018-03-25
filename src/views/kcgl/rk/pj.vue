@@ -59,10 +59,10 @@
         methods: {
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
-                    if (valid) {                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
-
+                    if (valid) {
+                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
                         this.$Message.info('正在添加');
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('addItem', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
                         }, (err) => {

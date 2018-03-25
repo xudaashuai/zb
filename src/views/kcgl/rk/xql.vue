@@ -3,17 +3,14 @@
         <FormItem label="名称" prop="名称" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="text" v-model="form.名称"></Input>
         </FormItem>
+        <FormItem label="货号" prop="货号" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
+            <Input type="text" v-model="form.货号"></Input>
+        </FormItem>
         <FormItem label="条码号" prop="条码号" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="text" v-model="form.条码号"></Input>
         </FormItem>
         <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model.number="form.标价"></Input>
-        </FormItem>
-
-        <FormItem  label="图片">
-            <image-upload v-model="uploadList">
-
-            </image-upload>
         </FormItem>
         <FormItem label="备注" prop="备注">
             <Input type="textarea" v-model="form.备注"></Input>
@@ -69,7 +66,10 @@
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">入库</Button>
             <Button type="ghost" @click="handleReset('form')" style="margin-left: 8px">重置</Button>
-        </FormItem>
+        </FormItem> <FormItem  label="图片">
+        <image-upload v-model="uploadList">
+        </image-upload>
+    </FormItem>
     </Form>
 </template>
 <script>
@@ -78,11 +78,10 @@
             return {
                 form: {
                     path: 'xql',
-                    配石: [],
                     条码号: '',
+                    货号:'',
                     名称: '',
                     标价: '',
-                    主石: {},
                     备注:''
                 },
                 uploadList: []
@@ -93,9 +92,9 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.info('正在添加');
-                        this.form._id = this.form.条码号;                        this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
+                        this.form._id = this.form.条码号;
                         this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('addItem', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
                         }, (err) => {
@@ -109,15 +108,6 @@
             handleReset (name) {
                 this.$refs[name].resetFields();
             },
-            handleAdd () {
-                this.form.配石.push({
-                    重量: '',
-                    名称: '',
-                });
-            },
-            handleRemove (index) {
-                this.form.配石.splice(index, 1);
-            }
         }
     };
 </script>

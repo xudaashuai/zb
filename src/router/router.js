@@ -9,6 +9,14 @@ export const loginRouter = {
     },
     component: () => import('@/views/login.vue')
 };
+export const itemRouter = {
+    path: '/ib/item/:path',
+    name: 'login',
+    meta: {
+        title: '浏览'
+    },
+    component:() => import('@/views/inventory-browsing/main.vue')
+};
 
 export const page404 = {
     path: '/*',
@@ -99,7 +107,7 @@ export const appRouter = [
   },
   */
     {
-        path: '/inventory-browsing',
+        path: '/ib',
         icon: 'cube',
         title: '库存浏览',
         name: 'Inventory browsing',
@@ -108,32 +116,32 @@ export const appRouter = [
             {
                 path: 'sp',
                 title: '商品',
-                name: 'inventory-browsing1',
-                component: () => import('@/views/inventory-browsing/zhubao/main.vue')
+                name: 'sp',
+                component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
-                path: 'sj',
+                path: 'sjk',
                 title: '设计款',
-                name: 'inventory-browsing2',
-                component: () => import('@/views/inventory-browsing/sheji/main.vue')
+                name: 'sjk',
+                component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
-                path: 'xq',
+                path: 'xql',
                 title: '镶嵌类',
-                name: 'inventory-browsing3',
-                component: () => import('@/views/inventory-browsing/xq/main.vue')
+                name: 'xql',
+                component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
                 path: 'pj',
                 title: '配件',
-                name: 'inventory-browsing4',
-                component: () => import('@/views/inventory-browsing/pj/main.vue')
+                name: 'pj',
+                component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
                 path: 'yl',
                 title: '原料',
-                name: 'inventory-browsing5',
-                component: () => import('@/views/inventory-browsing/yuanliao/main.vue')
+                name: 'yl',
+                component: () => import('@/views/inventory-browsing/main.vue')
             }
         ]
     },
@@ -426,6 +434,7 @@ export const appRouter = [
 export const routers = [
     loginRouter,
     otherRouter,
+    itemRouter,
     preview,
     locking,
     ...appRouter,

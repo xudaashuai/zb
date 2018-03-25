@@ -18,6 +18,16 @@
         <FormItem label="设计理念" prop="设计理念" :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="textarea" v-model="form.设计理念"></Input>
         </FormItem>
+        <FormItem
+                label="组成"
+                prop="组成"
+                :rules="{type:'array',required: true, message: '不能为空', trigger: 'blur'}">
+                <Select v-model="form.组成" filterable multiple>
+                    <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
+                        <span style="float:right;color:#ccc">{{item.条码号}}</span>
+                    </Option>
+                </Select>
+        </FormItem>
         <FormItem label="备注" prop="备注">
             <Input type="textarea" v-model="form.备注"></Input>
         </FormItem>
@@ -25,32 +35,6 @@
             <image-upload v-model="uploadList">
 
             </image-upload>
-        </FormItem>
-        <FormItem
-                v-for="(item, index) in form.组成"
-                :key="index"
-                :label="'组成 ' + (index+1)"
-                :prop="'组成.' + index "
-                :rules="{required: true, message: '组成 ' + (index+1) +'不能为空', trigger: 'blur'}">
-            <Row>
-                <Col span="20">
-                <Select v-model="form.组成[index]" filterable>
-                    <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
-                        <span style="float:right;color:#ccc">{{item.条码号}}</span>
-                    </Option>
-                </Select>
-                </Col>
-                <Col span="3" offset="1">
-                <Button type="ghost" @click="handleRemove(index)">删除</Button>
-                </Col>
-            </Row>
-        </FormItem>
-        <FormItem>
-            <Row>
-                <Col span="12">
-                <Button type="dashed" long @click="handleAdd" icon="plus-round">添加 组成</Button>
-                </Col>
-            </Row>
         </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit('form')">入库</Button>
@@ -75,7 +59,7 @@
                     主石: '',
                     设计人: '',
                     设计理念: '',
-                    备注:''
+                    备注: ''
                 },
                 defaultList: [],
                 imgName: '',
@@ -84,11 +68,12 @@
             };
         },
         computed: {
-
             ...mapState({
-                data: (state) => state.zb.sp.concat(state.zb.xql).concat(state.zb.sjk),
                 otherData: (state) => state.zb.pj.concat(state.zb.yl).filter((item) => item.状态 === '在库'),
             }),
+            data(){
+                return this.$store.getters.allData.filter(item => item.状态 === '在库' && (!(item.条码号 in this.form.组成)))
+            }
         },
         methods: {
             handleSubmit (name) {
@@ -97,7 +82,7 @@
                         this.$Message.info('正在添加');
                         this.form._id = this.form.条码号;
                         this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('addItem', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
                         }, (err) => {
@@ -110,13 +95,6 @@
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
-            },
-            handleAdd () {
-                this.index++;
-                this.form.组成.push('');
-            },
-            handleRemove (index) {
-                this.form.组成.splice(index, 1);
             },
         },
     };

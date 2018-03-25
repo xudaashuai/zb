@@ -36,9 +36,9 @@
                 mType: state => state.zb.mType,
                 uType: state => state.zb.uType,
             }),
-            ...mapState({
-                data: (state) => state.zb.sp.concat(state.zb.xql).concat(state.zb.sjk).filter((item) => item.状态 !== '在库'),
-            }),
+            data (state) {
+                return this.$store.getters.allData.filter((item) => item.状态 !== '在库');
+            },
             selectItem () {
                 let t = _.findWhere(this.otherData, {名称: this.form.物品});
                 if (t) {
@@ -52,18 +52,14 @@
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
                         if (valid) {
-                            if (this.form.物品类别 === '配件或原料' && (this.form.重量 > this.selectItem || this.form.重量 <= 0)) {
-                                this.$Message.error('重量不对哦');
-                            } else {
-                                this.$Message.info('正在出库');
-                                this.form._id = this.form.货号;
-                                this.$store.dispatch('ck', this.form).then((res) => {
-                                    console.log(res);
-                                    this.$Message.success('出库成功!');
-                                }, (err) => {
-                                    this.$Message.error(err);
-                                });
-                            }
+                            this.$Message.info('正在执行操作');
+                            this.form._id = this.form.货号;
+                            this.$store.dispatch('gh', this.form).then((res) => {
+                                console.log(res);
+                                this.$Message.success('归还成功!');
+                            }, (err) => {
+                                this.$Message.error(err);
+                            });
                         }
                         else {
                             this.$Message.error('表单信息不完整');

@@ -14,7 +14,7 @@
         <FormItem label="进货价" prop="进货价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
             <Input type="number" v-model.number="form.进货价"></Input>
         </FormItem>
-        <FormItem label="标价" prop="标价" :rules="{type:'number',required: true, message: '不能为空哦', trigger: 'blur'}">
+        <FormItem label="标价" prop="标价">
             <Input type="number" v-model.number="form.标价"></Input>
         </FormItem>
         <FormItem label="备注" prop="备注">
@@ -61,7 +61,7 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.info('正在添加');this.form.图片 = this.$_.map(this.uploadList, (item) => item.url);
-                        this.$store.dispatch('add', this.form).then((res) => {
+                        this.$store.dispatch('addItem', this.form).then((res) => {
                             console.log(res);
                             this.$Message.success('添加成功!');
                         }, (err) => {

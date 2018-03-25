@@ -10,10 +10,6 @@
                       :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
                 <Input type="text" v-model="form.领用人"></Input>
             </FormItem>
-            <FormItem disabled label="日期" prop="日期"
-                      :rules="{type:'date',required: true, message: '不能为空哦', trigger: 'blur'}">
-                <DatePicker type="date" v-model="form.日期"></DatePicker>
-            </FormItem>
             <FormItem label="物品类别" prop="物品类别" :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
                 <Select v-model="form.物品类别">
                     <Option v-for="item in wpType" :key="item" :value="item">{{item}}</Option>
@@ -21,7 +17,7 @@
             </FormItem>
 
             <FormItem v-if="form.物品类别==='商品'" label="物品" prop="物品"
-                      :rules="{required: true, message: '不能为空哦', trigger: 'change'}">
+                      :rules="{type:'array',required: true, message: '不能为空哦', trigger: 'change'}">
                 <Select v-model="form.物品" filterable multiple>
                     <Option v-for="item,index in data" :value="item.条码号" :key="item.条码号"><span>{{item.名称}}</span>
                         <span style="float:right;color:#ccc">{{item.条码号}}</span>
@@ -66,8 +62,7 @@
                     出库原因: '',
                     重量: 0,
                     售价: 0,
-                    物品: '',
-                    日期: new Date(),
+                    物品: [],
                     领用人: ''
                 },
                 ckType: [
@@ -88,9 +83,11 @@
                 uType: state => state.zb.uType,
             }),
             ...mapState({
-                data: (state) => state.zb.sp.concat(state.zb.xql).concat(state.zb.sjk).filter((item) => item.状态 === '在库'),
                 otherData: (state) => state.zb.pjAll.concat(state.zb.ylAll).filter((item) => item.状态 === '在库'),
             }),
+            data(){
+              return this.$store.getters.allData.filter((item)=>item.状态 === '在库')
+            },
             selectItem () {
                 let t = _.findWhere(this.otherData, {名称: this.form.物品});
                 if (t) {
@@ -109,14 +106,15 @@
                             } else {
                                 this.$Message.info('正在出库');
                                 this.form._id = this.form.货号;
-                                if (this.form.物品类别 === '配件或原料')
-                                this.form.type=_.findWhere(this.data)
-                                this.$store.dispatch('ck', this.form).then((res) => {
-                                    console.log(res);
-                                    this.$Message.success('出库成功!');
-                                }, (err) => {
-                                    this.$Message.error(err);
-                                });
+                                this.form.出库日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();;
+                                if (this.form.物品类别 === '配件或原料') {
+                                    this.$store.dispatch('ck', this.form).then((res) => {
+                                        console.log(res);
+                                        this.$Message.success('出库成功!');
+                                    }, (err) => {
+                                        this.$Message.error(err);
+                                    });
+                                }
                             }
                         }
                         else {

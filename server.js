@@ -53,6 +53,10 @@ function logging (rz) {
         }
     );
 };
+app.route('/add')
+    .post(function (req, res) {
+
+    });
 app.route('/:model')
     .get(function (req, res) {
         let model = req.params.model;
@@ -68,26 +72,51 @@ app.route('/:model')
     .post(function (req, res) {
         let model = req.params.model;
         if (model === 'ck') {
-            delete req.body.path;
             if (req.body.物品类别 === '商品') {
-                db.collection('sp').updateOne({
-                    _id: req.body.物品,
-                    状态: '在库'
-                }, {$set: {状态: '已' + req.body.出库原因}}, (err, result) => {
-                    if (err) {
-                        res.json(err);
-                    } else {
-                        if (result.nModified === 0) {
-                            res.json({
-                                errmsg: '该商品好像不在库存中，请确认后刷新重试'
-                            });
+                let array = {};
+                for (item of req.body.物品) {
+                    db.collection('item').updateOne({
+                        _id: req.body.物品,
+                        状态: '在库'
+                    }, {$set: {状态: '已' + req.body.出库原因}}, (err, result) => {
+                        if (err) {
+                            res.json(err);
                         } else {
-                            res.json(result);
-                            if(req.body.出库原因==='出售'){
-                                db.collection('cs').insertOne(
+                            if (result.nModified === 0) {
+                                array[item.条码号] = '已存在';
+                                if (array.keys().length === req.body.物品.length) {
+                                    res.json(array);
+                                }
+                            } else {
+                                array[item.条码号] = '出库成功';
+                                if (array.keys().length === req.body.物品.length) {
+                                    res.json(array);
+                                }
+                                if (req.body.出库原因 === '出售') {
+                                    db.collection('cs').insertOne(
+                                        {
+                                            时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                            商品: item,
+                                            售价: req.body.售价
+                                        },
+                                        (err, result) => {
+                                            if (err) {
+                                                throw err;
+                                                console.log(err);
+                                            } else {
+
+                                            }
+                                        }
+                                    );
+                                }
+                                db.collection('rz').insertOne(
                                     {
+                                        类型: '出库-' + req.body.出库原因,
+                                        模块: mk[model],
                                         时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                        商品:req.body.物品,
+                                        员工: req.body.员工,
+                                        物品: item,
+                                        售价: req.body.售价
                                     },
                                     (err, result) => {
                                         if (err) {
@@ -99,27 +128,9 @@ app.route('/:model')
                                     }
                                 );
                             }
-                            db.collection('rz').insertOne(
-                                {
-                                    类型: '出库-' + req.body.出库原因,
-                                    模块: mk[model],
-                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                    员工: req.body.员工,
-                                    物品: req.body.物品,
-                                    售价: req.body.售价
-                                },
-                                (err, result) => {
-                                    if (err) {
-                                        throw err;
-                                        console.log(err);
-                                    } else {
-
-                                    }
-                                }
-                            );
                         }
-                    }
-                });
+                    });
+                }
             } else {
                 db.collection('yl').updateOne({
                     _id: req.body.物品,
@@ -158,75 +169,164 @@ app.route('/:model')
                 });
             }
         }
-        //todo 配件和原料的入库累加在遇到价格不同时的处理
-        else if (model === 'pj' || model === 'yl') {
-            delete req.body.path;
-            db.collection(model).insertOne(req.body, (err, result) => {
-                if (err) {
-                    res.json(err);
-                    console.log(err);
-                } else {
-                    db.collection(model).updateOne({
-                        _id: req.body.名称
-                    }, {
-                        $inc: {
-                            重量: req.body.重量
-                        }
-                    }, function (err, result) {
-                        if (err) {
-                            res.json(err);
-                            console.log(err);
+        if (model === 'gh') {
+            let array = {};
+            for (item of req.body.物品) {
+                db.collection('item').updateOne({
+                    _id: req.body.物品,
+                }, {$set: {状态: '在库'}}, (err, result) => {
+                    if (err) {
+                        res.json(err);
+                    } else {
+                        if (result.nModified === 0) {
+                            array[item.条码号] = '已在库中';
+                            if (array.keys().length === req.body.物品.length) {
+                                res.json(array);
+                            }
                         } else {
-                            console.log(result.result);
-                            if (result.result.nModified === 1) {
-                                res.json(result);
-                                db.collection('rz').insertOne(
-                                    {
-                                        类型: '入库',
-                                        模块: mk[model],
-                                        时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                        员工: req.body.user,
-                                        物品: req.body._id,
-                                    },
-                                    (err, result) => {
-                                        if (err) {
-                                            throw err;
-                                            console.log(err);
-                                        } else {
-
-                                        }
-                                    }
-                                );
-                            } else {
-                                db.collection(model).insertOne({
-                                    ...req.body, _id: req.body.名称
-                                }, function (err, result) {
+                            array[item.条码号] = '归还成功';
+                            if (array.keys().length === req.body.物品.length) {
+                                res.json(array);
+                            }
+                            db.collection('rz').insertOne(
+                                {
+                                    类型: '归还' ,
+                                    模块: mk[model],
+                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                    员工: req.body.员工,
+                                    物品: item,
+                                },
+                                (err, result) => {
                                     if (err) {
+                                        throw err;
                                         console.log(err);
                                     } else {
-                                        db.collection('rz').insertOne(req.body, function (err, result) {
+
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+
+        }
+        //todo 配件和原料的入库累加在遇到价格不同时的处理
+        else if (model === 'item') {
+            let type = req.body.type;
+            if (type === 'pj' || type === 'yl') {
+                db.collection(model).insertOne(req.body, (err, result) => {
+                    if (err) {
+                        res.json(err);
+                        console.log(err);
+                    } else {
+                        db.collection(model).updateOne({
+                            _id: req.body.名称
+                        }, {
+                            $inc: {
+                                重量: req.body.重量
+                            }
+                        }, function (err, result) {
+                            if (err) {
+                                res.json(err);
+                                console.log(err);
+                            } else {
+                                console.log(result.result);
+                                if (result.result.nModified === 1) {
+                                    res.json(result);
+                                    db.collection('rz').insertOne(
+                                        {
+                                            类型: '入库',
+                                            模块: mk[model],
+                                            时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                            员工: req.body.user,
+                                            物品: req.body._id,
+                                        },
+                                        (err, result) => {
                                             if (err) {
-                                                res.json(err);
+                                                throw err;
                                                 console.log(err);
                                             } else {
-                                                res.json(result);
-                                                let rz = {
-                                                    类型: '入库',
-                                                    模块: mk[model],
-                                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
-                                                    员工: req.body.user,
-                                                    物品: req.body._id,
-                                                };
-                                                logging(rz);
+
                                             }
-                                        });
-                                    }
-                                });
+                                        }
+                                    );
+                                } else {
+                                    db.collection(model).insertOne({
+                                        ...req.body, _id: req.body.名称
+                                    }, function (err, result) {
+                                        if (err) {
+                                            console.log(err);
+                                        } else {
+                                            db.collection('rz').insertOne(req.body, function (err, result) {
+                                                if (err) {
+                                                    res.json(err);
+                                                    console.log(err);
+                                                } else {
+                                                    res.json(result);
+                                                    let rz = {
+                                                        类型: '入库',
+                                                        模块: mk[model],
+                                                        时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                                        员工: req.body.user,
+                                                        物品: req.body._id,
+                                                    };
+                                                    logging(rz);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
+                        });
+                    }
+                });
+            } else {
+                db.collection(model).insertOne(req.body, function (err, result) {
+                    if (err) {
+                        res.json(err);
+                        console.log(err);
+                    } else {
+                        res.json(result);
+                        if (model === 'pd') {
+                            db.collection('rz').insertOne(
+                                {
+                                    类型: '盘点',
+                                    模块: mk[model],
+                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                    员工: req.body.user,
+                                },
+                                (err, result) => {
+                                    if (err) {
+                                        throw err;
+                                        console.log(err);
+                                    } else {
+
+                                    }
+                                }
+                            );
+                        } else if (model != 'rz') {
+                            db.collection('rz').insertOne(
+                                {
+                                    类型: '入库',
+                                    模块: mk[model],
+                                    时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
+                                    员工: req.body.user,
+                                    物品: req.body._id,
+                                },
+                                (err, result) => {
+                                    if (err) {
+                                        throw err;
+                                        console.log(err);
+                                    } else {
+
+                                    }
+                                }
+                            );
                         }
-                    });
-                }
-            });
+                    }
+                });
+            }
         }
         else if (model === 'login') {
             db.collection('user').findOne(req.body, (err, result) => {
@@ -305,8 +405,6 @@ app.route('/:model')
             });
         }
         else {
-            delete req.body.path;
-            req.body._id = req.body.条码号;
             db.collection(model).insertOne(req.body, function (err, result) {
                 if (err) {
                     res.json(err);
@@ -314,8 +412,7 @@ app.route('/:model')
                 } else {
                     res.json(result);
                     if (model === 'pd') {
-                        db.collection('rz').insertOne(
-                            {
+                        db.collection('rz').insertOne({
                                 类型: '盘点',
                                 模块: mk[model],
                                 时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
