@@ -847,6 +847,7 @@ const zb = {
             });
         },
         ck (context, data) {
+            console.log(data)
             data.user = Cookies.get('username');
             return new Promise((resolve, reject) => {
                 axios.post('/ck', data).then(res => {

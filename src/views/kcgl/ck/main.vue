@@ -58,7 +58,6 @@
                 form: {
                     path: 'ck',
                     物品类别: '',
-                    出库物品: '',
                     出库原因: '',
                     重量: 0,
                     售价: 0,
@@ -85,8 +84,8 @@
             ...mapState({
                 otherData: (state) => state.zb.pjAll.concat(state.zb.ylAll).filter((item) => item.状态 === '在库'),
             }),
-            data(){
-              return this.$store.getters.allData.filter((item)=>item.状态 === '在库')
+            data () {
+                return this.$store.getters.allData.filter((item) => item.状态 === '在库');
             },
             selectItem () {
                 let t = _.findWhere(this.otherData, {名称: this.form.物品});
@@ -106,15 +105,14 @@
                             } else {
                                 this.$Message.info('正在出库');
                                 this.form._id = this.form.货号;
-                                this.form.出库日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();;
-                                if (this.form.物品类别 === '配件或原料') {
-                                    this.$store.dispatch('ck', this.form).then((res) => {
-                                        console.log(res);
-                                        this.$Message.success('出库成功!');
-                                    }, (err) => {
-                                        this.$Message.error(err);
-                                    });
-                                }
+                                this.form.出库日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
+                                this.$store.dispatch('ck', this.form).then((res) => {
+                                    console.log(res);
+                                    this.$Message.success('出库成功!');
+                                }, (err) => {
+                                    this.$Message.error(err);
+                                });
+
                             }
                         }
                         else {

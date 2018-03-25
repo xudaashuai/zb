@@ -84,12 +84,12 @@ app.route('/:model')
                         } else {
                             if (result.nModified === 0) {
                                 array[item.条码号] = '已存在';
-                                if (array.keys().length === req.body.物品.length) {
+                                if (Object.keys(array).length === req.body.物品.length) {
                                     res.json(array);
                                 }
                             } else {
                                 array[item.条码号] = '出库成功';
-                                if (array.keys().length === req.body.物品.length) {
+                                if (Object.keys(array).length === req.body.物品.length) {
                                     res.json(array);
                                 }
                                 if (req.body.出库原因 === '出售') {
