@@ -849,7 +849,7 @@ const zb = {
         ck (context, data) {
             data.user = Cookies.get('username');
             return new Promise((resolve, reject) => {
-                axios.post('/item', data).then(res => {
+                axios.post('/ck', data).then(res => {
                     if (res.data.errmsg) {
                         if (res.data.code === 11000) {
                             reject('该商品已存在');
