@@ -41,9 +41,7 @@ let mk = {
 };
 
 function logging (rz) {
-    db.collection('rz').insertOne(
-        rz,
-        (err, result) => {
+    db.collection('rz').insertOne(rz, (err, result) => {
             if (err) {
                 throw err;
                 console.log(err);
@@ -52,11 +50,8 @@ function logging (rz) {
             }
         }
     );
-};
-app.route('/add')
-    .post(function (req, res) {
+}
 
-    });
 app.route('/:model')
     .get(function (req, res) {
         let model = req.params.model;
@@ -74,21 +69,30 @@ app.route('/:model')
         if (model === 'ck') {
             if (req.body.物品类别 === '商品') {
                 let array = {};
-                for (item of req.body.物品) {
+                for (let item of req.body.物品) {
+                    console.log(item);
                     db.collection('item').updateOne({
-                        _id: req.body.物品,
-                        状态: '在库'
-                    }, {$set: {状态: '已' + req.body.出库原因}}, (err, result) => {
+                        _id: item,
+                    }, {
+                        $set: {
+                            状态: '已' + req.body.出库原因
+                        }
+                    }, (err, result) => {
                         if (err) {
+                            console.log(err);
                             res.json(err);
                         } else {
-                            if (result.nModified === 0) {
-                                array[item.条码号] = '已存在';
+                            result = result.result;
+                            console.log(result);
+                            if (result.n === 0) {
+                                array[item] = '已存在';
+                                console.log(Object.keys(array).length);
+                                console.log(array);
                                 if (Object.keys(array).length === req.body.物品.length) {
                                     res.json(array);
                                 }
                             } else {
-                                array[item.条码号] = '出库成功';
+                                array[item] = '出库成功';
                                 if (Object.keys(array).length === req.body.物品.length) {
                                     res.json(array);
                                 }
@@ -131,7 +135,8 @@ app.route('/:model')
                         }
                     });
                 }
-            } else {
+            }
+            else {
                 db.collection('yl').updateOne({
                     _id: req.body.物品,
                     状态: '在库',
@@ -140,14 +145,14 @@ app.route('/:model')
                     if (err) {
                         res.json(err);
                     } else {
+                        console.log(result);
                         if (result.nModified === 0) {
                             res.json({
                                 errmsg: '该商品好像不在库存中，请确认后刷新重试'
                             });
                         } else {
                             res.json(result);
-                            db.collection('rz').insertOne(
-                                {
+                            db.collection('rz').insertOne({
                                     类型: '出库-' + req.body.出库原因,
                                     模块: mk[model],
                                     时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
@@ -169,7 +174,7 @@ app.route('/:model')
                 });
             }
         }
-        if (model === 'gh') {
+        else if (model === 'gh') {
             let array = {};
             for (item of req.body.物品) {
                 db.collection('item').updateOne({
@@ -190,7 +195,7 @@ app.route('/:model')
                             }
                             db.collection('rz').insertOne(
                                 {
-                                    类型: '归还' ,
+                                    类型: '归还',
                                     模块: mk[model],
                                     时间: new Date().toLocaleDateString() + new Date().toLocaleTimeString(),
                                     员工: req.body.员工,
