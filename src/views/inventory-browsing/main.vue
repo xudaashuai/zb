@@ -113,7 +113,7 @@
                 show: state => state.app.show
             }),
             data1 () {
-                let result = this.$store.state.zb.item.filter((item) => item.type === this.$route.name).slice(0,10);
+                let result = this.$store.state.zb.item.filter((item) => item.type === this.$route.name).slice(0,300);
                 return result.filter((item) => {
                         for (let key in this.form) {
                             try {
