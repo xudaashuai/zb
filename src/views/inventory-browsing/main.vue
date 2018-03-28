@@ -52,7 +52,7 @@
                     证书号: '',
                     状态: ''
                 },
-                type:'',
+                type:"全部",
             };
         },
         mounted () {
@@ -129,7 +129,7 @@
                 );
             },
             data () {
-                return this.data1.filter(item=>this.type==='全部'&&item.材质.indexOf(this.type)>-1)
+                return this.data1.filter(item=>this.type==='全部'|| item.材质.indexOf(this.type)>-1)
             },
             ...mapState({
                 show: (state) => state.app.show
