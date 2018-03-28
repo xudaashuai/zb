@@ -17,6 +17,10 @@
                 <Button type="primary" @click="resetSearch">重置</Button>
             </FormItem>
         </Form>
+        <Tabs v-model="type" type="card" v-if="path === 'sp'">
+            <TabPane label="全部" name="全部"></TabPane>
+            <TabPane v-for="item in mType" :key="item" :label="item" :name="item"></TabPane>
+        </Tabs>
         <v-table v-if='show' ref="table" highlight-row stripe class="table" border :columns="columns"
                  is-vertical-resize
                  style="width:100%"
@@ -26,6 +30,7 @@
                  row-hover-color="#eee"
                  row-click-color="#edf7ff"
                  odd-bg-color="#fafafa"
+                 :column-cell-class-name="columnCellClass"
                  :table-data="data"></v-table>
     </Card>
 </template>
@@ -46,13 +51,15 @@
                     条码号: '',
                     证书号: '',
                     状态: ''
-                }
+                },
+                type:'',
             };
         },
         mounted () {
         },
         created () {
-            /*this.$store.dispatch('get', {path: 'sp'}).then(
+            /*
+            this.$store.dispatch('get', {path: 'sp'}).then(
                 () => this.$Message.success('加载数据成功'),
                 () => this.$Message.error('加载数据失败')
             );*/
@@ -83,30 +90,30 @@
         },
         beforeRouteEnter (to, from, next) {
             console.log(to);
-            next(vm => {
-                vm.path = to.name;
-            });
+            next();
         },
         beforeRouteUpdate (to, from, next) {
             console.log(to);
+            this.path = to.name;
+            console.log(this.path)
             next();
         },
         props: {
-            path: {
-                default: 'sp'
-            }
         },
         computed: {
             columns () {
-                return this.$store.getters.columns[this.path];
+                return this.$store.getters.columns[this.$route.name];
+            },
+            path(){
+              return this.$route.name
             },
             ...mapState({
                 mType: state => state.zb.mType,
                 uType: state => state.zb.uType,
                 show: state => state.app.show
             }),
-            data () {
-                let result = this.$store.state.zb.item.filter((item) => item.type === this.path);
+            data1 () {
+                let result = this.$store.state.zb.item.filter((item) => item.type === this.$route.name).slice(0,10);
                 return result.filter((item) => {
                         for (let key in this.form) {
                             try {
@@ -120,6 +127,9 @@
                         return true;
                     }
                 );
+            },
+            data () {
+                return this.data1.filter(item=>this.type==='全部'&&item.材质.indexOf(this.type)>-1)
             },
             ...mapState({
                 show: (state) => state.app.show
@@ -138,7 +148,7 @@
         }
     };
 </script>
-<style scoped>
+<style>
     .card {
         height: 100%;
         width: auto;
@@ -147,5 +157,15 @@
     .search-button {
         position: fixed;
         right: 30px
+    }
+    .w-class{
+        background-color: #4e9;
+        color:#fff;
+    }
+    .ivu-tabs-bar{
+        margin-bottom: 0;
+    }
+    .ivu-form-item{
+        margin:10px;
     }
 </style>
