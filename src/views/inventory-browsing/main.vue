@@ -17,9 +17,9 @@
                 <Button type="primary" @click="resetSearch">重置</Button>
             </FormItem>
         </Form>
-        <Tabs v-model="type" type="card" v-if="path === 'sp'">
+        <Tabs v-model="type" type="card" v-if="st">
             <TabPane label="全部" name="全部"></TabPane>
-            <TabPane v-for="item in mType" :key="item" :label="item" :name="item"></TabPane>
+            <TabPane v-for="item in uType" :key="item" :label="item" :name="item"></TabPane>
         </Tabs>
         <v-table v-if='show' ref="table" highlight-row stripe class="table" border :columns="columns"
                  is-vertical-resize
@@ -96,12 +96,15 @@
             console.log(to);
             this.path = to.name;
             console.log(this.path)
+            this.type="全部",
             next();
         },
         props: {
         },
         computed: {
             columns () {
+                if(this.st){return this.$store.getters.columns['sp']}
+                else
                 return this.$store.getters.columns[this.$route.name];
             },
             path(){
@@ -113,7 +116,12 @@
                 show: state => state.app.show
             }),
             data1 () {
-                let result = this.$store.state.zb.item.filter((item) => item.type === this.$route.name).slice(0,300);
+                let result= {}
+                if (this.st) {
+                 result   = this.$store.state.zb.item.filter((item) => item.type ==='sp'&&item.材质===this.$route.name).slice(0, 300);
+                }else {
+                    result = this.$store.state.zb.item.filter((item) => item.type === this.$route.name).slice(0, 300);
+                }
                 return result.filter((item) => {
                         for (let key in this.form) {
                             try {
@@ -129,11 +137,14 @@
                 );
             },
             data () {
-                return this.data1.filter(item=>this.type==='全部'|| item.材质.indexOf(this.type)>-1)
+                return this.data1.filter(item=>this.type==='全部'|| item.类别.indexOf(this.type)>-1)
             },
             ...mapState({
                 show: (state) => state.app.show
-            })
+            }),
+            st(){
+                return this.$route.fullPath.startsWith('/ib/s-')
+            }
         },
         mounted () {
         },

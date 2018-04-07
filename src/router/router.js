@@ -114,15 +114,45 @@ export const appRouter = [
         component: Main,
         children: [
             {
-                path: 'sp',
-                title: '商品',
-                name: 'sp',
+                path: 's-hty',
+                title: '和田玉',
+                name: '和田玉',
                 component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
-                path: 'sjk',
-                title: '设计款',
-                name: 'sjk',
+                path: 's-nh',
+                title: '南红',
+                name: '南红',
+                component: () => import('@/views/inventory-browsing/main.vue')
+            },
+            {
+                path: 's-1',
+                title: '碧玉',
+                name: '碧玉',
+                component: () => import('@/views/inventory-browsing/main.vue')
+            },
+            {
+                path: 's-2',
+                title: '翡翠',
+                name: '翡翠',
+                component: () => import('@/views/inventory-browsing/main.vue')
+            },
+            {
+                path: 's-3',
+                title: '绿松石',
+                name: '绿松石',
+                component: () => import('@/views/inventory-browsing/main.vue')
+            },
+            {
+                path: 's-4',
+                title: '蜜蜡',
+                name: '蜜蜡',
+                component: () => import('@/views/inventory-browsing/main.vue')
+            },
+            {
+                path: 's-5',
+                title: '玛瑙',
+                name: '玛瑙',
                 component: () => import('@/views/inventory-browsing/main.vue')
             },
             {
