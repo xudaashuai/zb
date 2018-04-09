@@ -34,11 +34,10 @@
                 </div>
                 <div class="header-avator-con">
                     <adminMode :into-admin-mode="intoAdminMode"></adminMode>
+                    <time-table></time-table>
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
                     <lock-screen></lock-screen>
                     <message-tip v-model="mesCount"></message-tip>
-                    <theme-switch></theme-switch>
-
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -80,9 +79,11 @@
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
+    import TimeTable from './main-components/time-table';
 
     export default {
         components: {
+            TimeTable,
             shrinkableMenu,
             tagsPageOpened,
             breadcrumbNav,
@@ -207,6 +208,62 @@
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
             this.$store.dispatch('init');
+            this.$store.dispatch('get', {path: 'event'}).then(_ => {
+                Date.prototype.Format = function (fmt) { //author: meizz
+                    var o = {
+                        'M+': this.getMonth() + 1, //月份
+                        'd+': this.getDate(), //日
+                        'h+': this.getHours(), //小时
+                        'm+': this.getMinutes(), //分
+                        's+': this.getSeconds(), //秒
+                        'q+': Math.floor((this.getMonth() + 3) / 3), //季度
+                        'S': this.getMilliseconds() //毫秒
+                    };
+                    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+                    for (var k in o) {
+                        if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+                    }
+                    return fmt;
+                };
+                let t = new Date();
+                let now = t.Format('yyyy-MM-dd');
+                for (let item of this.$store.state.zb.event) {
+                    if (!item.ok) {
+                        console.log(item, now);
+                        let i = 0;
+                        if (now <= item.end && now >= item.start) {
+                            setTimeout(_ => {
+                                let a = this.$Notice.success({
+                                    title: item.title,
+                                    desc: '',
+                                    name:item._id,
+                                    render: h => {
+                                        return h('div', [
+                                            h('br'),
+                                            h('Button', {
+                                                on: {
+                                                    click:  () =>{
+                                                        this.$Notice.destroy(item._id)
+                                                    }
+                                                }, props: {long: true}
+                                            }, '知道啦'),
+                                            h('Button', {
+                                                on: {
+                                                    click: ()=> {
+                                                        this.$Notice.destroy(item._id)
+                                                        this.$store.dispatch('eventOk',item)
+                                                    }
+                                                }, props: {long: true}
+                                            }, '不再提醒',),
+                                        ]);
+                                    }
+                                });
+                            }, 2000);
+                        }
+                    }
+                }
+            }).catch();
+
         }
     };
 </script>

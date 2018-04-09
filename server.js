@@ -409,6 +409,17 @@ app.route('/:model')
                 }
             });
         }
+        else if (model === 'eventOk') {
+            db.collection('event').updateOne({
+                _id: req.body._id,
+            }, {$set: {ok: true}}, (err, result) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.json(result);
+                }
+            });
+        }
         else {
             db.collection(model).insertOne(req.body, function (err, result) {
                 if (err) {

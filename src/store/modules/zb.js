@@ -21,6 +21,7 @@ const zb = {
         user: [],
         ylAll: [],
         pjAll: [],
+        event: [],
         apiUrl: '',
     },
     mutations: {
@@ -713,7 +714,7 @@ const zb = {
     },
     actions: {
         init (context, data) {
-            for (let model of ['item', 'xql', 'yl', 'pj', 'sjk']) {
+            for (let model of ['item', 'user', 'event']) {
                 context.dispatch('get', {path: model});
             }
         },
@@ -847,7 +848,7 @@ const zb = {
             });
         },
         ck (context, data) {
-            console.log(data)
+            console.log(data);
             data.user = Cookies.get('username');
             return new Promise((resolve, reject) => {
                 axios.post('/ck', data).then(res => {
@@ -895,6 +896,24 @@ const zb = {
                 let ip = res.data.cmcc.match(/[\d\.]+/);
                 context.commit('setUrl', 'http://' + ip + ':' + 672 + '/');
             }).catch(err => console.log(err));
+        },
+        eventOk (context, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('/eventOk', {_id: data._id}).then(res => {
+                    if (res.data.errmsg) {
+                        if (res.data.code === 11000) {
+                            reject('已存在');
+                        } else {
+                            reject('错误代码' + res.data.code);
+                        }
+                    } else {
+                        resolve(res.data);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
         }
     }
 };

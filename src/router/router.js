@@ -71,7 +71,8 @@ export const otherRouter = {
             name: 'ownspace_index',
             component: () => import('@/views/own-space/own-space.vue')
         },
-        {path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue')}
+        {path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue')},
+        {path: 'time', title: '时间表', name: 'time_index', component: () => import('@/views/main-components/time-table/time-table-v.vue')},
     ]
 };
 

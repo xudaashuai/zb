@@ -1,6 +1,5 @@
 <template>
-    <v-table is-horizontal-resize style="width:100%" :columns="columns" :table-data="tableData" :row-click="rowClick"
-             :column-cell-class-name="columnCellClass" row-hover-color="#eee" row-click-color="#edf7ff"></v-table>
+    <Card>123</Card>
 </template>
 
 

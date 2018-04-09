@@ -16,6 +16,9 @@ import ItemsView from './views/main-components/items-view/items-view.vue';
 import ItemsView2 from './views/main-components/items-view/items-view2.vue';
 import ImageUpload from './views/main-components/image-upload.vue';
 
+import fullCalendar from 'vue-fullcalendar'
+
+Vue.component('full-calendar', fullCalendar)
 Vue.component(ImageUpload.name, ImageUpload);
 Vue.component(ImageView.name, ImageView);
 Vue.component(ItemsView.name, ItemsView);
