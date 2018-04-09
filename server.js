@@ -413,7 +413,7 @@ app.route('/:model')
         else if (model === 'eventOk') {
             console.log(req.body._id)
             db.collection('event').updateOne({
-                _id: new ObjectId(req.body._id),
+                _id: new ObjectID(req.body._id),
             }, {$set: {ok: true}}, (err, result) => {
                 if (err) {
                     res.json(err);
