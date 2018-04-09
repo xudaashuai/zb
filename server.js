@@ -6,6 +6,7 @@ var path = require('path');
 server.listen(8081);
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var url = 'mongodb://120.25.75.23:27017/data';
 var db = null;
 app.use(bodyParser.json()); // for parsing application/json
@@ -412,7 +413,7 @@ app.route('/:model')
         else if (model === 'eventOk') {
             console.log(req.body._id)
             db.collection('event').updateOne({
-                _id: req.body._id,
+                _id: new ObjectId(req.body._id),
             }, {$set: {ok: true}}, (err, result) => {
                 if (err) {
                     res.json(err);
