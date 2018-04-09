@@ -410,6 +410,7 @@ app.route('/:model')
             });
         }
         else if (model === 'eventOk') {
+            console.log(req.body._id)
             db.collection('event').updateOne({
                 _id: req.body._id,
             }, {$set: {ok: true}}, (err, result) => {

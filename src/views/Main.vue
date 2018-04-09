@@ -230,7 +230,6 @@
                 for (let item of this.$store.state.zb.event) {
                     if (!item.ok) {
                         console.log(item, now);
-                        let i = 0;
                         if (now <= item.end && now >= item.start) {
                             setTimeout(_ => {
                                 let a = this.$Notice.success({
@@ -251,7 +250,8 @@
                                                 on: {
                                                     click: ()=> {
                                                         this.$Notice.destroy(item._id)
-                                                        this.$store.dispatch('eventOk',item)
+                                                        console.log(item)
+                                                        this.$store.dispatch('eventOk',item).then((data)=>console.log(data))
                                                     }
                                                 }, props: {long: true}
                                             }, '不再提醒',),
