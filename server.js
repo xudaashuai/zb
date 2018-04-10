@@ -188,7 +188,7 @@ app.route('/:model')
             let array = {};
             for (let item of req.body.物品) {
                 db.collection('item').updateOne({
-                    _id:new ObjectID(item),
+                    _id:item,
                 }, {$set: {状态: '在库'}}, (err, result) => {
                     result = result.result;
                     console.log(item,array,err,result)
