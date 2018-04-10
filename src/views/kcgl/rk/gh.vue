@@ -36,8 +36,8 @@
                 mType: state => state.zb.mType,
                 uType: state => state.zb.uType,
             }),
-            data (state) {
-                return this.$store.getters.allData.filter((item) => item.状态 !== '在库');
+            data () {
+                return this.$store.state.zb.item.filter((item) => item.状态 !== '在库');
             },
             selectItem () {
                 let t = _.findWhere(this.otherData, {名称: this.form.物品});
