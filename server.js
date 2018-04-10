@@ -186,7 +186,7 @@ app.route('/:model')
         }
         else if (model === 'gh') {
             let array = {};
-            for (item of req.body.物品) {
+            for (let item of req.body.物品) {
                 db.collection('item').updateOne({
                     _id:item,
                 }, {$set: {状态: '在库'}}, (err, result) => {
