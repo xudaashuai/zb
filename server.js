@@ -188,20 +188,20 @@ app.route('/:model')
             let array = {};
             for (let item of req.body.物品) {
                 db.collection('item').updateOne({
-                    _id:item,
+                    _id:ObjectID(item),
                 }, {$set: {状态: '在库'}}, (err, result) => {
                     result = result.result;
-                    console.log(err,result)
+                    console.log(item,array,err,result)
                     if (err) {
                         res.json(err);
                     } else {
                         if (result.nModified === 0) {
-                            array[item.条码号] = '已在库中';
+                            array[item] = '已在库中';
                             if (Object.keys(array).length === req.body.物品.length) {
                                 res.json(array);
                             }
                         } else {
-                            array[item.条码号] = '归还成功';
+                            array[item] = '归还成功';
                             if (Object.keys(array).length === req.body.物品.length) {
                                 res.json(array);
                             }
