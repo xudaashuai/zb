@@ -190,6 +190,7 @@ app.route('/:model')
                 db.collection('item').updateOne({
                     _id:item,
                 }, {$set: {状态: '在库'}}, (err, result) => {
+                    result = result.result;
                     console.log(err,result)
                     if (err) {
                         res.json(err);
