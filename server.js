@@ -96,6 +96,15 @@ app.route('/:model')
                                 array[item] = '出库成功';
                                 if (Object.keys(array).length === req.body.物品.length) {
                                     res.json(array);
+                                    db.collection('event').insertOne(
+                                        {
+                                            '_id': '5acab882b06e4c077017bb26',
+                                            'title': '归还外出展览商品',
+                                            'start': req.body.归还日期,
+                                            'end': req.body.归还日期,
+                                            'ok': false
+                                        }
+                                    );
                                 }
                                 if (req.body.出库原因 === '出售') {
                                     db.collection('cs').insertOne(
@@ -411,7 +420,7 @@ app.route('/:model')
             });
         }
         else if (model === 'eventOk') {
-            console.log(req.body._id)
+            console.log(req.body._id);
             db.collection('event').updateOne({
                 _id: new ObjectID(req.body._id),
             }, {$set: {ok: true}}, (err, result) => {

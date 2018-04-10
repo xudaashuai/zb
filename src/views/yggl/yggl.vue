@@ -14,6 +14,11 @@
                         <Icon type="ios-locked-outline" slot="prepend"></Icon>
                         </Input>
                     </FormItem>
+                    <FormItem prop="access">
+                        <Select v-model="form.access" style="width:200px">
+                            <Option v-for="item,index in accessList" :value="index" :key="index">{{ item}}</Option>
+                        </Select>
+                    </FormItem>
                     <FormItem>
                         <Button type="primary" @click="handleSubmit('form')">添加</Button>
                     </FormItem>
@@ -30,6 +35,7 @@
             </a>
             <p>用户名：{{item.username}}</p>
             <p> 密码：{{item.password}}</p>
+            <p> 权限：{{accessList[item.access]}}</p>
         </Card>
     </div>
 </template>
@@ -44,8 +50,13 @@
                 form: {
                     path: 'user',
                     username: '',
-                    password: ''
+                    password: '',
+                    access:0
                 },
+                accessList:[
+                    '员工',
+                    '店长',
+                ],
                 rule: {
                     username: [
                         {required: true, message: '输入用户名呀', trigger: 'blur'}

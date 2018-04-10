@@ -40,6 +40,10 @@
                       :rules="{required: true, message: '不能为空哦', trigger: 'blur'}">
                 <Input type="number" v-model.number="form.售价"></Input>
             </FormItem>
+            <FormItem v-if="form.出库原因==='外出展览'" label="归还日期" prop="归还日期">
+                <DatePicker placement="bottom-end" placeholder="选择日期" v-model="归还日期"
+                            style="width: 200px"></DatePicker>
+            </FormItem>
             <FormItem>
                 <Button type="primary" @click="handleSubmit('form')">添加</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="handleReset('form')">清空</Button>
@@ -62,8 +66,9 @@
                     重量: 0,
                     售价: 0,
                     物品: [],
-                    领用人: ''
+                    领用人: '',
                 },
+                归还日期:new Date(),
                 ckType: [
                     '出售',
                     '制作领用',
@@ -104,7 +109,8 @@
                                 this.$Message.error('重量不对哦');
                             } else {
                                 this.$Message.info('正在出库');
-                                this.form._id = this.form.货号;
+                                this.form.归还日期 = this.归还日期.toLocaleDateString().replace(/\//g,'-',)
+                                console.log(this.form)
                                 this.form.出库日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
                                 this.$store.dispatch('ck', this.form).then((res) => {
                                     console.log(res);
@@ -112,7 +118,6 @@
                                 }, (err) => {
                                     this.$Message.error(err);
                                 });
-
                             }
                         }
                         else {

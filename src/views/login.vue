@@ -62,15 +62,12 @@
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
                         this.$store.dispatch('login', this.form).then((result) => {
+                            console.log(result)
                             this.$Message.success('登陆成功');
                             Cookies.set('user', this.form.username);
                             Cookies.set('password', this.form.password);
                             this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                            if (this.form.username === 'admin') {
-                                Cookies.set('access', 0);
-                            } else {
-                                Cookies.set('access', 1);
-                            }
+                            Cookies.set('access',result.access);
                             this.$router.push({
                                 name: 'home_index'
                             });
