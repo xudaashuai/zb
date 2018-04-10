@@ -109,7 +109,7 @@
                                 this.$Message.error('重量不对哦');
                             } else {
                                 this.$Message.info('正在出库');
-                                this.form.归还日期 = this.归还日期.toLocaleDateString().replace(/\//g,'-',)
+                                this.form.归还日期 = this.归还日期.Format('yyyy-MM-dd')
                                 console.log(this.form)
                                 this.form.出库日期 = new Date().toLocaleDateString() + new Date().toLocaleTimeString();
                                 this.$store.dispatch('ck', this.form).then((res) => {

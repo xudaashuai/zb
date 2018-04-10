@@ -98,7 +98,6 @@ app.route('/:model')
                                     res.json(array);
                                     db.collection('event').insertOne(
                                         {
-                                            '_id': '5acab882b06e4c077017bb26',
                                             'title': '归还外出展览商品',
                                             'start': req.body.归还日期,
                                             'end': req.body.归还日期,
