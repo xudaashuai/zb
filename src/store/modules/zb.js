@@ -22,6 +22,7 @@ const zb = {
         ylAll: [],
         pjAll: [],
         event: [],
+        client: [],
         apiUrl: '',
     },
     mutations: {
@@ -525,6 +526,41 @@ const zb = {
                         'overflowTitle': true
                     },
                 ],
+                client: [
+                    {
+                        'key': '名称',
+                        'title': '名称',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '名称',
+                        isFrozen: true,
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '生日',
+                        'title': '生日',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '生日',
+                        'overflowTitle': true
+                    },
+                    {
+                        'key': '备注',
+                        'title': '备注',
+                        'sortable': true,
+                        'width': 120,
+                        'titleAlign': 'center',
+                        'columnAlign': 'center',
+                        'isResize': true,
+                        'field': '备注',
+                        'overflowTitle': true
+                    },]
             };
         },
         pdColumns (state, getters, rootState) {
@@ -714,7 +750,7 @@ const zb = {
     },
     actions: {
         init (context, data) {
-            for (let model of ['item', 'user', 'event']) {
+            for (let model of ['item', 'user', 'event','client']) {
                 context.dispatch('get', {path: model});
             }
         },
@@ -764,6 +800,22 @@ const zb = {
                             path: data.path
                         });
                     }
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+        },
+        addClient (context, data) {
+            console.log(data);
+            data.user = Cookies.get('user');
+            data.生日 = data.生日.toLocaleDateString().replace(/\//g,'-')
+            return new Promise((resolve, reject) => {
+                axios.post('/client', data).then(res => {
+                    resolve(res.data);
+                    context.dispatch('get', {
+                        path: 'client'
+                    });
                 }).catch(err => {
                     console.log(err);
                     reject(err);

@@ -263,6 +263,22 @@ export const appRouter = [
             },
         ]
     },
+    {
+        path: '/khgl',
+        icon: 'cube',
+        title: '客户管理',
+        name: 'khgl',
+        access: 1,
+        component: Main,
+        children: [
+            {
+                path: 'khgl1',
+                title: '客户管理',
+                name: 'khgl1',
+                component: () => import('@/views/khgl/main.vue')
+            },
+        ]
+    },
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

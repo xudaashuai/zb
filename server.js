@@ -438,6 +438,16 @@ app.route('/:model')
                     res.json(err);
                     console.log(err);
                 } else {
+                    if(model === 'client'){
+                        db.collection('event').insertOne(
+                            {
+                                'title': req.body.名称+'客户生日到啦',
+                                'start': req.body.生日,
+                                'end': req.body.生日,
+                                'ok': false
+                            }
+                        );
+                    }
                     res.json(result);
                     if (model === 'pd') {
                         db.collection('rz').insertOne({
@@ -455,7 +465,8 @@ app.route('/:model')
                                 }
                             }
                         );
-                    } else if (model != 'rz') {
+                    }
+                    else if (model != 'rz') {
                         db.collection('rz').insertOne(
                             {
                                 类型: '入库',
